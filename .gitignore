@@ -1,7 +1,9 @@
 .DS_Store
-node_modules
-build
-es
-lib
+
+node_modules/
+build/
+es/
+lib/
+
 *.log
 *.tgz
