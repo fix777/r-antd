@@ -7,6 +7,7 @@ const App = () => (
   <div>
     <h1>Hello world...</h1>
     <RTable
+      fixedMaxWidth={false}
       columns={[
         {
           title: "A",
@@ -14,6 +15,7 @@ const App = () => (
           width: 200,
           tooltip: true,
           fixed: "left",
+          render: text => <a>{ text }</a>,
         },
         {
           title: "B",
@@ -23,7 +25,7 @@ const App = () => (
       ]}
       dataSource={[
         {
-          a: "This is aThis is aThis is aThis is aThis is aThis is aThis is aThis is aThis is aThis is a",
+          a: "This is aThis is aThis is aThis is aThis is aThis is aThis is aThis is aThis is aThis is",
           b: "This is b",
         },
         {

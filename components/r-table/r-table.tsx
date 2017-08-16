@@ -1,5 +1,12 @@
-import React, { Component } from "react";
+import React, {
+  Component,
+  CSSProperties,
+} from "react";
 import { Table } from "antd";
+import {
+  TableProps,
+  TableColumnConfig,
+} from "antd/lib/table/table";
 
 import {
   wrapTooltip,
@@ -7,11 +14,11 @@ import {
 } from "./../__util";
 
 export const mapColumns = (columns: any[] = []) => columns.map(column => {
-  const { tooltip = false, width } = column;
+  const { tooltip = false, width, render } = column;
   if (!tooltip) return column;
   if (!width) throw new Error("Ops, width is required when you need wrap tooltip!");
   return Object.assign({}, column, {
-    render: wrapTooltip({ maxWidth: width }),
+    render: wrapTooltip({ maxWidth: width, preRender: render }),
   });
 });
 
@@ -21,15 +28,26 @@ export const scrollX = (columns: any[] = []): undefined | number => {
 
   const unFixedColumnWidthSum =
     columns
-      //.filter(({ fixed }) => !fixed)
+      // .filter(({ fixed }) => !fixed)
       .reduce((widthSum: number, { width = 0 }) => widthSum + Number(width), 0);
   // console.log(unFixedColumnWidthSum);
   return unFixedColumnWidthSum;
 };
 
-export class RTable extends Component<any, any> {
+export interface RColumnsProps<T> extends TableColumnConfig<T> {
+  tooltip?: boolean;
+}
+
+export interface RTableProps<T> extends TableProps<T> {
+  fixedMaxWidth?: boolean;
+  columns: Array<RColumnsProps<T>>;
+}
+
+export class RTable<T> extends Component<RTableProps<T>, {}> {
   render() {
     const {
+      fixedMaxWidth = false,
+      style,
       columns,
       pagination,
       scroll,
@@ -45,11 +63,11 @@ export class RTable extends Component<any, any> {
 
     const xWidth = scrollX(columns);
 
+    const defaultStyle: Partial<CSSProperties> = fixedMaxWidth ? { maxWidth: xWidth || "100%" } : {};
+
     return (
       <Table
-        style={{
-          maxWidth: xWidth || "100%",
-        }}
+        style={{ ...style, ...defaultStyle }}
         size="middle"
         columns={mapColumns(columns)}
         pagination={{
@@ -57,7 +75,7 @@ export class RTable extends Component<any, any> {
           pageSizeOptions: ["10", "20", "50", "100", "500", "1000"],
           showQuickJumper: true,
           showTotal: (total, [start, end]) => `${start}-${end} / ${total}`,
-          ...pagination
+          ...pagination as any
         }}
         scroll={{
           x: xWidth,

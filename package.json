@@ -3,6 +3,7 @@
   "version": "0.1.1",
   "description": "",
   "main": "lib/components/index.js",
+  "typings": "lib/components/index.d.ts",
   "scripts": {
     "lib": "webpack --env.env=prod",
     "dev": "webpack-dev-server --env.env=dev",
