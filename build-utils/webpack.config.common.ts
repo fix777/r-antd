@@ -2,7 +2,7 @@ import * as webpack from "webpack";
 
 const commonConfig: webpack.Configuration = {
   resolve: {
-    extensions: [".ts", ".tsx", ".js", ".jsx", ".css", ".less", ".scss"],
+    extensions: [".ts", ".tsx", ".js", ".jsx", ".css"],
   },
   module: {
     rules: [
