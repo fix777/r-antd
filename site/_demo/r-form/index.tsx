@@ -42,6 +42,9 @@ export default class DemoOnly extends Component<{}, any> {
     return (
       <div style={{ padding: 15 }}>
         <RForm
+          // style={{ maxWidth: 300 }}
+          // layout="vertical"
+          // layout="inline"
           header="This is a r-form."
           footer={{
             defaultActionAlign: "right",
@@ -54,19 +57,24 @@ export default class DemoOnly extends Component<{}, any> {
           onFormChange={this.updateFields}
           formItems={[
             {
+              // itemSpan: 24,
               label: "WHATEVER",
               id: "whatever",
               decorate: true,
               control: (
-                <Input />
+                <Input
+                  // style={{ width: "100%" }}
+                />
               ),
             },
             {
+              // itemSpan: 24,
               label: "品牌",
               id: "vendor",
               decorate: true,
               control: (
                 <RSelect
+                  // style={{ width: "100%" }}
                   dataSource={[
                     {
                       label: "Li Ning",
@@ -81,6 +89,7 @@ export default class DemoOnly extends Component<{}, any> {
               ),
             },
             {
+              // itemSpan: 24,
               label: "用户",
               id: "user",
               decorate: false,

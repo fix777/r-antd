@@ -63,18 +63,25 @@ export class RForm extends Component<RFormProps> {
     const {
       form,
       formItems,
+      layout = "horizontal",
     } = this.props;
     const {
       getFieldDecorator,
     } = form as WrappedFormUtils;
+
+    const DEFAULT_FORMITEM_LAYOUT = {
+      labelCol: { span: 4 },
+      wrapperCol: { span: 20 }
+    };
+
+    const formItemLayout = ["vertical", "inline"].includes(layout) ? {} : DEFAULT_FORMITEM_LAYOUT;
 
     const renderItem = ({ itemSpan = 8, decorate, id = "r-form-item-uuid", decoratorOptions, control, ...rest }: RFormItemProps, i: number) => {
       if (decorate) control = getFieldDecorator(id, decoratorOptions)(control);
       return (
         <Col key={i} span={itemSpan}>
           <FormItem
-            labelCol={{ span: 4 }}
-            wrapperCol={{ span: 20 }}
+            {...formItemLayout}
             {...rest}
           >
             { control }
