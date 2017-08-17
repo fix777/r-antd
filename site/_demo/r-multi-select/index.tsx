@@ -9,7 +9,12 @@ interface R {
   }>;
 }
 
-export default class DemoOnly extends Component<{}, any> {
+export interface DemoOnlyProps {
+  value: string[];
+  onSelectUser?(userNames: string[]): void;
+}
+
+export default class DemoOnly extends Component<DemoOnlyProps, any> {
   state = {
     isLoading: false,
     dataSource: [],
@@ -22,7 +27,7 @@ export default class DemoOnly extends Component<{}, any> {
       .then(resp => resp.json())
       .then(({ results = [] }: R) => {
         this.setState({ isLoading: false });
-        console.log(results);
+        // console.log(results);
         const dataSource = results.map(({ name = {}, picture = {}, }) => {
           const { first, last } = name;
           const { thumbnail } = picture;
@@ -36,7 +41,7 @@ export default class DemoOnly extends Component<{}, any> {
             value: `${first} ${last}`,
           };
         });
-        console.log(dataSource);
+        // console.log(dataSource);
         this.setState({ dataSource });
       });
   }
@@ -48,13 +53,16 @@ export default class DemoOnly extends Component<{}, any> {
     } = this.state;
 
     return (
-      <div style={{ width: 300, margin: "25% auto" }}>
+      // <div style={{ width: 300, margin: "25% auto" }}>
         <RMultiSelect
+          size="large"
+          value={this.props.value}
           isLoading={isLoading}
           dataSource={dataSource}
           onSearch={this.handleSearch}
+          onChange={this.props.onSelectUser}
         />
-      </div>
+      // </div>
     );
   }
 }

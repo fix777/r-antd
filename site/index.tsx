@@ -1,7 +1,8 @@
 import React from "react";
 import { render } from "react-dom";
 
-import App from "./_demo/r-multi-select";
+// import App from "./_demo/r-multi-select";
+import App from "./_demo/r-form";
 
 // import { RTable, } from "./../components";
 

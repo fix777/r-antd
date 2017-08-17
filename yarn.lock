@@ -2,14 +2,18 @@
 # yarn lockfile v1
 
 
-"@types/node@*", "@types/node@^8.0.22":
+"@types/node@*", "@types/node@8.0.22":
   version "8.0.22"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-8.0.22.tgz#9c6bfee1f45f5e9952ff6b487e657ecca48c7777"
 
-"@types/react-dom@^15.5.2":
+"@types/react-dom@15.5.2":
   version "15.5.2"
   resolved "https://registry.yarnpkg.com/@types/react-dom/-/react-dom-15.5.2.tgz#f7203c75a1728812355f037ea112611d082555e6"
-"@types/react@^15.0.0":
+  dependencies:
+    "@types/node" "8.0.22"
+    "@types/react" "15.6.1"
+
+"@types/react@15.6.1":
   version "15.6.1"
   resolved "https://registry.yarnpkg.com/@types/react/-/react-15.6.1.tgz#497f7228762da4432e335957cb34fe9b40f150ae"
 
@@ -27,7 +31,7 @@
   dependencies:
     "@types/source-map" "*"
 
-"@types/webpack@^3.0.9":
+"@types/webpack@3.0.9":
   version "3.0.9"
   resolved "https://registry.yarnpkg.com/@types/webpack/-/webpack-3.0.9.tgz#9e3749c6da68e0c86870a7a876b48aed31a2edf8"
   dependencies:
@@ -2725,6 +2729,10 @@ lodash.keys@^3.1.2:
 lodash.memoize@^4.1.2:
   version "4.1.2"
   resolved "https://registry.yarnpkg.com/lodash.memoize/-/lodash.memoize-4.1.2.tgz#bcc6c49a42a2840ed997f323eada5ecd182e0bfe"
+
+lodash.omit@^4.5.0:
+  version "4.5.0"
+  resolved "https://registry.yarnpkg.com/lodash.omit/-/lodash.omit-4.5.0.tgz#6eb19ae5a1ee1dd9df0b969e66ce0b7fa30b5e60"
 
 lodash.throttle@^4.0.0:
   version "4.1.1"
