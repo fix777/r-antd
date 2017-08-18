@@ -2,7 +2,7 @@ import * as webpack from "webpack";
 
 const commonConfig: webpack.Configuration = {
   resolve: {
-    extensions: [".ts", ".tsx", ".js", ".jsx", ".css"],
+    extensions: [".ts", ".tsx", ".js", ".jsx", ".less"],
   },
   module: {
     rules: [
@@ -15,7 +15,7 @@ const commonConfig: webpack.Configuration = {
         ],
       },
       {
-        test: /.css$/,
+        test: /\.css$/,
         use: [
           require.resolve("style-loader"),
           require.resolve("css-loader"),

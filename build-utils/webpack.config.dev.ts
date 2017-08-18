@@ -19,6 +19,18 @@ const commonConfig: webpack.Configuration = {
     // hot: true,
     port: 7777,
   },
+  module: {
+    rules: [
+      {
+        test: /\.less$/,
+        use: [
+          require.resolve("style-loader"),
+          require.resolve("css-loader"),
+          require.resolve("less-loader"),
+        ],
+      },
+    ],
+  },
   plugins: [
     new webpack.ProgressPlugin(),
     new HtmlWebpackPlugin({

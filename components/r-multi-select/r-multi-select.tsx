@@ -1,6 +1,9 @@
 import React, {
   Component,
 } from "react";
+import classNames from "classnames";
+
+// import "./style/index.less";
 
 import { Spin } from "antd";
 
@@ -17,8 +20,11 @@ export class RMultiSelect extends Component<RMultiSelectProps> {
       ...rest
     } = this.props;
 
+    const clazz = classNames("r-multi-select");
+
     return (
       <RSelect
+        className={clazz}
         style={{ width: "100%" }}
         mode="multiple"
         allowClear
