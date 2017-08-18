@@ -4,18 +4,26 @@
   "description": "",
   "main": "lib/components/index.js",
   "typings": "lib/components/index.d.ts",
+  "keywords": [
+    "react",
+    "antd"
+  ],
+  "author": "fix777 <wangguoguo.lan@gmail.com>",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fix777/r-antd.git"
+  },
+  "bugs": {
+    "url": "https://github.com/fix777/r-antd/issues"
+  },
+  "homepage": "https://github.com/fix777/r-antd#readme",
+  "license": "MIT",
   "scripts": {
     "lib": "webpack --env.env=prod && gulp addCssjs",
     "dev": "webpack-dev-server --env.env=dev",
     "test": "echo \"Error: no test specified\" && exit 1",
     "prepublish": "yarn lib"
   },
-  "keywords": [
-    "react",
-    "antd"
-  ],
-  "author": "Felix Wang <wangguoguo.lan@gmail.com>",
-  "license": "MIT",
   "devDependencies": {
     "@types/node": "8.0.22",
     "@types/react": "15.6.1",
