@@ -1,100 +1,127 @@
 import React from "react";
 import { render } from "react-dom";
+import { Layout, Breadcrumb, Icon } from "antd";
 
-import App from "./_demo/r-multi-select";
+import "./index.less";
+
+import { RMenu } from "./../components";
+
+const { Header, Sider, Content } = Layout;
+
+// import App from "./_demo/r-multi-select";
 // import App from "./_demo/r-form";
+// import App from "./_demo/r-menu/app";
 
-// import { RTable, } from "./../components";
+class App extends React.Component<{}, any> {
+  state = {
+    current: "r-form",
+    content: null,
+  };
 
-// const App = () => (
-//   <div>
-//     <h1>Hello world...</h1>
-//     <RTable
-//       fixedMaxWidth={false}
-//       columns={[
-//         {
-//           title: "A",
-//           dataIndex: "a",
-//           width: 200,
-//           tooltip: true,
-//           fixed: "left",
-//           render: text => <a>{ text }</a>,
-//         },
-//         {
-//           title: "B",
-//           dataIndex: "b",
-//           width: 500,
-//         },
-//       ]}
-//       dataSource={[
-//         {
-//           a: "This is aThis is aThis is aThis is aThis is aThis is aThis is aThis is aThis is aThis is",
-//           b: "This is b",
-//         },
-//         {
-//           a: "This is A",
-//           b: "This is B",
-//         },
-//         {
-//           a: "This is a",
-//           b: "This is b",
-//         },
-//         {
-//           a: "This is A",
-//           b: "This is B",
-//         },
-//         {
-//           a: "This is a",
-//           b: "This is b",
-//         },
-//         {
-//           a: "This is A",
-//           b: "This is B",
-//         },
-//         {
-//           a: "This is a",
-//           b: "This is b",
-//         },
-//         {
-//           a: "This is A",
-//           b: "This is B",
-//         },
-//         {
-//           a: "This is a",
-//           b: "This is b",
-//         },
-//         {
-//           a: "This is A",
-//           b: "This is B",
-//         },
-//         {
-//           a: "This is a",
-//           b: "This is b",
-//         },
-//         {
-//           a: "This is A",
-//           b: "This is B",
-//         },
-//         {
-//           a: "This is a",
-//           b: "This is b",
-//         },
-//         {
-//           a: "This is A",
-//           b: "This is B",
-//         },
-//         {
-//           a: "This is a",
-//           b: "This is b",
-//         },
-//         {
-//           a: "This is A",
-//           b: "This is B",
-//         },
-//       ]}
-//     />
-//   </div>
-// );
+  componentDidMount() {
+    const { current } = this.state;
+    this.renderContent(current);
+  }
+
+  renderContent = (current?: string) => {
+    if (!current) {
+      const searchParams = new URLSearchParams(location.search);
+      current = searchParams.get("comp") || "r-form";
+    }
+    const DemoOnly = require(`./_demo/${current}`).default;
+    this.setState({ current, content: <DemoOnly /> });
+  }
+
+  handleSiderMenuClick = ({ key }) => {
+    const searchParams = new URLSearchParams(location.search);
+    searchParams.set("comp", key);
+    window.history.replaceState({}, "", `${location.pathname}?${searchParams}`);
+    this.renderContent();
+  }
+
+  render() {
+    const {
+      current,
+    } = this.state;
+
+    return (
+      <Layout>
+        <Header className="header">
+          <div className="logo">R-Antd</div>
+          <RMenu
+            // theme="dark"
+            mode="horizontal"
+            defaultSelectedKeys={["doc"]}
+            style={{ lineHeight: "64px" }}
+            dataSource={[
+              {
+                type: "menuitem",
+                key: "doc",
+                children: "Documentation",
+              },
+            ]}
+          />
+        </Header>
+        <Layout>
+          <Sider className="sider">
+            <RMenu
+              theme="dark"
+              mode="inline"
+              defaultSelectedKeys={[current]}
+              defaultOpenKeys={["comp"]}
+              style={{ height: "100%", borderRight: 0 }}
+              onClick={this.handleSiderMenuClick}
+              dataSource={[
+                {
+                  type: "submenu",
+                  key: "comp",
+                  title: <span><Icon type="appstore-o" />Component</span>,
+                  children: [
+                    {
+                      type: "menuitem",
+                      key: "r-form",
+                      children: "RForm",
+                    },
+                    {
+                      type: "menuitem",
+                      key: "r-menu",
+                      children: "RMenu",
+                    },
+                    {
+                      type: "menuitem",
+                      key: "r-multi-select",
+                      children: "RMultiSelect",
+                    },
+                    {
+                      type: "menuitem",
+                      key: "r-select",
+                      children: "RSelect",
+                    },
+                    {
+                      type: "menuitem",
+                      key: "r-table",
+                      children: "RTable",
+                    },
+                  ] as any,
+                },
+              ]}
+            />
+          </Sider>
+          <Layout style={{ padding: "0 24px 24px" }}>
+            <Breadcrumb style={{ margin: "12px 0" }}>
+              <Breadcrumb.Item>Documentation</Breadcrumb.Item>
+              <Breadcrumb.Item>Component</Breadcrumb.Item>
+              <Breadcrumb.Item>{ current }</Breadcrumb.Item>
+            </Breadcrumb>
+            <Content className="content">
+              { this.state.content }
+            </Content>
+          </Layout>
+        </Layout>
+      </Layout>
+    );
+  }
+}
 
 render(
   <App />,

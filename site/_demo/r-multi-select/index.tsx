@@ -57,23 +57,21 @@ export default class DemoOnly extends Component<DemoOnlyProps, any> {
     } = this.state;
 
     return (
-      <div style={{ width: 300, margin: "25% auto" }}>
-        <Group compact>
-          <RSelect
-            style={{ width: "30%" }}
-            dataSource={[{ label: "A", value: "a" }, { label: "B", value: "b" }]}
-          />
-          <RMultiSelect
-            style={{ width: "70%" }}
-            // size="large"
-            value={this.props.value}
-            isLoading={isLoading}
-            dataSource={dataSource}
-            onSearch={this.handleSearch}
-            onChange={this.props.onSelectUser}
-          />
-        </Group>
-      </div>
+      <Group compact>
+        <RSelect
+          style={{ width: "30%" }}
+          dataSource={[{ label: "A", value: "a" }, { label: "B", value: "b" }]}
+        />
+        <RMultiSelect
+          style={{ width: "70%" }}
+          // size="large"
+          value={this.props.value}
+          isLoading={isLoading}
+          dataSource={dataSource}
+          onSearch={this.handleSearch}
+          onChange={this.props.onSelectUser}
+        />
+      </Group>
     );
   }
 }
