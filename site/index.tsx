@@ -20,7 +20,9 @@ class App extends React.Component<{}, any> {
 
   componentDidMount() {
     const { current } = this.state;
-    this.renderContent(current);
+    const searchParams = new URLSearchParams(location.search);
+    const c = searchParams.get("comp") || current;
+    this.renderContent(c);
   }
 
   renderContent = (current?: string) => {

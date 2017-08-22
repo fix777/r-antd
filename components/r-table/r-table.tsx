@@ -56,8 +56,13 @@ export class RTable<T> extends Component<RTableProps<T>, {}> {
 
     let rest = others;
     if (!others.rowKey) {
-      rest = Object.assign({}, others, {
+      rest = Object.assign({}, rest, {
         dataSource: insertIndexAsKey(others.dataSource),
+      });
+    }
+    if (!pagination) {
+      rest = Object.assign({}, rest, {
+        pagination,
       });
     }
 
