@@ -18,7 +18,7 @@ export const mapColumns = (columns: any[] = []) => columns.map(column => {
   if (!tooltip) return column;
   if (!width) throw new Error("Ops, width is required when you need wrap tooltip!");
   return Object.assign({}, column, {
-    render: wrapTooltip({ maxWidth: width, preRender: render }),
+    render: wrapTooltip({ maxWidth: Number(width) - 20, preRender: render }),
   });
 });
 
