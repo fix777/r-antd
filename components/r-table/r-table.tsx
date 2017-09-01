@@ -1,6 +1,7 @@
 import React, {
   Component,
   CSSProperties,
+  ReactNode,
 } from "react";
 import { Table } from "antd";
 import {
@@ -14,11 +15,15 @@ import {
 } from "./../__util";
 
 export const mapColumns = (columns: any[] = []) => columns.map(column => {
-  const { tooltip = false, width, render } = column;
+  const { tooltip = false, renderTooltip, width, render } = column;
   if (!tooltip) return column;
   if (!width) throw new Error("Ops, width is required when you need wrap tooltip!");
   return Object.assign({}, column, {
-    render: wrapTooltip({ maxWidth: Number(width) - 20, preRender: render }),
+    render: wrapTooltip({
+      maxWidth: Number(width) - 20,
+      preRender: render,
+      renderTooltip,
+    }),
   });
 });
 
@@ -36,6 +41,7 @@ export const scrollX = (columns: any[] = []): undefined | number => {
 
 export interface RColumnsProps<T> extends TableColumnConfig<T> {
   tooltip?: boolean;
+  renderTooltip?(text?: any, record?: any, index?: number): ReactNode;
 }
 
 export interface RTableProps<T> extends TableProps<T> {

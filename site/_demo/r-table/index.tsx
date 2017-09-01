@@ -14,6 +14,10 @@ const DemoOnly = () => (
           dataIndex: "a",
           width: 200,
           tooltip: true,
+          renderTooltip: (text, { b }) => {
+            console.log(text);
+            return b;
+          },
           fixed: "left",
           render: text => <a>{ text }</a>,
         },
