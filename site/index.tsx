@@ -14,7 +14,7 @@ const { Header, Sider, Content } = Layout;
 
 class App extends React.Component<{}, any> {
   state = {
-    current: "r-form",
+    current: "",
     content: null,
   };
 
@@ -22,6 +22,7 @@ class App extends React.Component<{}, any> {
     const { current } = this.state;
     const searchParams = new URLSearchParams(location.search);
     const c = searchParams.get("comp") || current;
+    this.setState({ current: c });
     this.renderContent(c);
   }
 
@@ -69,7 +70,7 @@ class App extends React.Component<{}, any> {
             <RMenu
               theme="dark"
               mode="inline"
-              defaultSelectedKeys={[current]}
+              selectedKeys={[current]}
               defaultOpenKeys={["comp"]}
               style={{ height: "100%", borderRight: 0 }}
               onClick={this.handleSiderMenuClick}
