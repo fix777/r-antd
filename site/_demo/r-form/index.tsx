@@ -49,12 +49,15 @@ export default class DemoOnly extends Component<{}, any> {
           footer={{
             defaultActionAlign: "right",
             showClear: true,
+            showAdvancedToggle: true,
+            advancedToggleTexts: ["展开", "收起"],
             clearText: "清空",
             onClear: this.handleClear,
             submitText: "搜索",
             onSubmit: this.handleSubmit,
           }}
           onFormChange={this.updateFields}
+          defaultRenderFormItemCount={1}
           formItems={[
             {
               // itemSpan: 24,

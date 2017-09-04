@@ -23,8 +23,11 @@ export interface RFormFooter {
   showClear?: boolean;
   clearText?: string; // Text of clear button, default as "Clear".
   submitText?: string; // Text of submit button, default as "Submit".
+  showAdvancedToggle?: boolean; // Advanced toggle flag, default as false. You need to use it with "defaultRenderFormItemCount" | "renderFormItemCount".
+  advancedToggleTexts?: string[]; // Default as ["Expand", "Collapse"]
   onClear?(): void;
   onSubmit(): void;
+  onAdvancedToggle?(prevRenderCount?: number): void;
 }
 
 export interface RFormProps extends FormProps {
@@ -32,11 +35,45 @@ export interface RFormProps extends FormProps {
   header?: ReactNode;
   formItemGutter?: number; // Row gutter, default as 10.
   formItems: RFormItemProps[];
+  defaultRenderFormItemCount?: number; // Default as 0.
+  renderFormItemCount?: number;
   footer?: boolean | RFormFooter;
   onFormChange?(changedFields: any): void; // Only includes decorated form control.
 }
 
-export class RForm extends Component<RFormProps> {
+export interface RFormState {
+  renderCount: number;
+}
+
+export class RForm extends Component<RFormProps, RFormState> {
+  static defaultProps: Partial<RFormProps> = {
+    formItemGutter: 10,
+    defaultRenderFormItemCount: 0,
+  };
+
+  constructor(props: RFormProps) {
+    super(props);
+
+    const getRenderCount = ({ defaultRenderFormItemCount = 0, renderFormItemCount }: RFormProps) => {
+      if (typeof renderFormItemCount == "number") return renderFormItemCount;
+      return defaultRenderFormItemCount;
+    };
+
+    this.state = {
+      renderCount: getRenderCount(props),
+    };
+  }
+
+  componentWillReceiveProps({ renderFormItemCount }: RFormProps) {
+    if (
+      typeof renderFormItemCount == "number"
+      && this.props.renderFormItemCount !== renderFormItemCount
+      && this.state.renderCount !== renderFormItemCount
+    ) {
+      this.setState({ renderCount: renderFormItemCount });
+    }
+  }
+
   onPreClear = () => {
     const { form, footer = {}, } = this.props;
     const { resetFields } = form as WrappedFormUtils;
@@ -68,6 +105,9 @@ export class RForm extends Component<RFormProps> {
     const {
       getFieldDecorator,
     } = form as WrappedFormUtils;
+    const {
+      renderCount,
+    } = this.state;
 
     const DEFAULT_FORMITEM_LAYOUT = {
       labelCol: { span: 4 },
@@ -90,12 +130,42 @@ export class RForm extends Component<RFormProps> {
       );
     };
 
-    return formItems.map(renderItem);
+    let formItemsToRender = formItems;
+    if (renderCount) formItemsToRender = formItems.slice(0, renderCount);
+
+    return formItemsToRender.map(renderItem);
+  }
+
+  onPreAdvancedToggle = () => {
+    const {
+      defaultRenderFormItemCount = 0,
+      renderFormItemCount,
+      footer = {},
+    } = this.props;
+    const {
+      onAdvancedToggle,
+    } = footer as RFormFooter;
+    const {
+      renderCount = 0,
+    } = this.state;
+
+    if (
+      typeof renderFormItemCount == "number"
+      && typeof onAdvancedToggle == "function"
+    ) {
+      return onAdvancedToggle(renderCount);
+    }
+
+    const nextRenderCount = !renderCount ? defaultRenderFormItemCount : 0;
+    this.setState({ renderCount: nextRenderCount });
   }
 
   renderFooter = () => {
     const { footer = false } = this.props;
     if (!footer) return null;
+    const {
+      renderCount = 0,
+    } = this.state;
 
     const {
       defaultActionAlign = "left",
@@ -104,6 +174,8 @@ export class RForm extends Component<RFormProps> {
       showClear = false,
       clearText = "Clear",
       submitText = "Submit",
+      showAdvancedToggle = false,
+      advancedToggleTexts = ["Expand", "Collapse"],
       onSubmit,
     } = footer as RFormFooter;
 
@@ -114,6 +186,16 @@ export class RForm extends Component<RFormProps> {
         <Col span={24 - Number(defaultActionSpan)}>
           { extraAction }
         </Col>
+      );
+    };
+
+    const renderAdvancedToggle = () => {
+      if (!showAdvancedToggle) return null;
+
+      const text = !renderCount ? advancedToggleTexts[1] : advancedToggleTexts[0];
+
+      return (
+        <a style={{ marginRight: 4 }} onClick={this.onPreAdvancedToggle}>{ text }</a>
       );
     };
 
@@ -129,6 +211,7 @@ export class RForm extends Component<RFormProps> {
       <Row>
         { renderExtra() }
         <Col style={{ textAlign: defaultActionAlign }} span={Number(defaultActionSpan)}>
+          { renderAdvancedToggle() }
           { renderClear() }
           <Button type="primary" onClick={onSubmit}>{ submitText }</Button>
         </Col>
