@@ -58,6 +58,6 @@
     "webpack-merge": "^4.1.0"
   },
   "dependencies": {
-    "antd": "^2.12.6"
+    "antd": "^2.12.8"
   }
 }

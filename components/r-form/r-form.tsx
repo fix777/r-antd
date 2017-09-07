@@ -230,6 +230,8 @@ export class RForm extends Component<RFormProps, RFormState> {
       "wrappedComponentRef",
       "header",
       "formItems",
+      "defaultRenderFormItemCount",
+      "renderFormItemCount",
       "footer",
       "onFormChange",
     ]);
