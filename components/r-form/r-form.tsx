@@ -4,8 +4,10 @@ import React, {
 } from "react";
 import omit from "lodash.omit";
 import { Row, Col, Form, Button } from "antd";
-import { FormProps, WrappedFormUtils, GetFieldDecoratorOptions } from "antd/lib/form/Form";
+import { FormProps, WrappedFormUtils, GetFieldDecoratorOptions, FormComponentProps } from "antd/lib/form/Form";
 import { FormItemProps } from "antd/lib/form/FormItem";
+
+export type FormComponentProps = FormComponentProps;
 
 const { Item: FormItem } = Form;
 
