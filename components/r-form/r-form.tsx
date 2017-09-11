@@ -119,14 +119,18 @@ export class RForm extends Component<RFormProps, RFormState> {
     const formItemLayout = ["vertical", "inline"].includes(layout) ? {} : DEFAULT_FORMITEM_LAYOUT;
 
     const renderItem = ({ itemSpan = 8, decorate, id = "r-form-item-uuid", decoratorOptions, control, ...rest }: RFormItemProps, i: number) => {
-      if (decorate) control = getFieldDecorator(id, decoratorOptions)(control);
+      let formItemControl: any = control;
+      if (formItemControl && typeof formItemControl.type === "function" && !formItemControl.props.size) {
+        formItemControl = React.cloneElement(formItemControl, { size: "default" });
+      }
+      if (decorate) formItemControl = getFieldDecorator(id, decoratorOptions)(formItemControl);
       return (
         <Col key={i} span={itemSpan}>
           <FormItem
             {...formItemLayout}
             {...rest}
           >
-            { control }
+            { formItemControl }
           </FormItem>
         </Col>
       );
