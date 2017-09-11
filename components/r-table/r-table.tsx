@@ -27,14 +27,27 @@ export const mapColumns = (columns: any[] = []) => columns.map(column => {
   });
 });
 
-export const scrollX = (columns: any[] = []): undefined | number => {
+export const scrollX = (props: RTableProps<{}>): undefined | number => {
+  const {
+    columns = [],
+    rowSelection,
+    expandedRowRender,
+  } = props;
+
   const hasFixedColumn = columns.some(({ fixed }) => !!fixed);
   if (!hasFixedColumn) return;
+
+  let hasCheckbox = false;
+  if (typeof rowSelection == "object" && rowSelection) hasCheckbox = true;
+
+  let initalWidth = 0;
+  if (hasCheckbox) initalWidth += 62;
+  if (typeof expandedRowRender == "function") initalWidth += 50;
 
   const unFixedColumnWidthSum =
     columns
       // .filter(({ fixed }) => !fixed)
-      .reduce((widthSum: number, { width = 0 }) => widthSum + Number(width), 0);
+      .reduce((widthSum: number, { width = 0 }) => widthSum + Number(width), initalWidth);
   // console.log(unFixedColumnWidthSum);
   return unFixedColumnWidthSum;
 };
@@ -72,7 +85,7 @@ export class RTable<T> extends Component<RTableProps<T>, {}> {
       });
     }
 
-    const xWidth = scrollX(columns);
+    const xWidth = scrollX(this.props);
 
     const defaultStyle: Partial<CSSProperties> = fixedMaxWidth ? { maxWidth: xWidth || "100%" } : {};
 

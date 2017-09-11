@@ -13,18 +13,19 @@ const DemoOnly = () => (
           title: "A",
           dataIndex: "a",
           width: 200,
+          fixed: "left",
           tooltip: true,
           renderTooltip: (text, { b }) => {
+            // tslint:disable-next-line:no-console
             console.log(text);
             return b;
           },
-          fixed: "left",
           render: text => <a>{ text }</a>,
         },
         {
           title: "B",
           dataIndex: "b",
-          width: 500,
+          width: 2000,
         },
       ]}
       dataSource={[
@@ -93,6 +94,9 @@ const DemoOnly = () => (
           b: "This is B",
         },
       ]}
+      rowSelection={{
+        onChange: console.log,
+      }}
     />
   </div>
 );
