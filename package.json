@@ -1,11 +1,14 @@
 {
   "name": "r-antd",
-  "version": "0.1.17",
+  "version": "0.1.18",
   "description": "",
   "main": "lib/index.js",
   "module": "es/index.js",
   "typings": "lib/index.d.ts",
-  "keywords": ["react", "antd"],
+  "keywords": [
+    "react",
+    "antd"
+  ],
   "author": "fix777 <wangguoguo.lan@gmail.com>",
   "repository": {
     "type": "git",
