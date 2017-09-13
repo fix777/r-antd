@@ -1,4 +1,5 @@
 import React, { Component, ReactNode } from "react";
+import classNames from "classnames";
 import omit from "lodash.omit";
 import { Row, Col, Form, Button } from "antd";
 import {
@@ -37,6 +38,7 @@ export interface RFormFooter {
 
 export interface RFormProps extends FormProps {
   // form?: WrappedFormUtils;
+  background?: "normal";
   header?: ReactNode;
   formItemGutter?: number; // Row gutter, default as 10.
   formItems: RFormItemProps[];
@@ -243,7 +245,11 @@ export class RForm extends Component<RFormProps, RFormState> {
   };
 
   render() {
-    const { formItemGutter = 10, ...others } = this.props;
+    const { formItemGutter = 10, background, ...others } = this.props;
+
+    const clazz = classNames({
+      "r-antd-r-form_background--normal": background === "normal",
+    });
 
     const rest = omit(others, [
       "form",
@@ -258,7 +264,7 @@ export class RForm extends Component<RFormProps, RFormState> {
     ]);
 
     return (
-      <Form {...rest}>
+      <Form className={clazz} {...rest}>
         {this.renderHeader()}
         <Row gutter={formItemGutter}>{this.renderFormItems()}</Row>
         {this.renderFooter()}

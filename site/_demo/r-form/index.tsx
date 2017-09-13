@@ -48,6 +48,7 @@ export default class DemoOnly extends Component<{}, any> {
           // style={{ maxWidth: 300 }}
           // layout="vertical"
           // layout="inline"
+          background="normal"
           header="This is a r-form."
           footer={{
             defaultActionAlign: "right",
