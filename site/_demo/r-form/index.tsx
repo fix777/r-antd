@@ -2,7 +2,8 @@ import React, { Component } from "react";
 
 import { Input } from "antd";
 
-import { RForm, RSelect } from "./../../../components";
+import { RForm, RSelect } from "./../../../es";
+// import "./../../../lib/r-form/style/css";
 import UserSelect from "./../r-multi-select";
 
 export default class DemoOnly extends Component<{}, any> {
