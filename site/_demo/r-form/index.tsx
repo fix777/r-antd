@@ -11,14 +11,14 @@ export default class DemoOnly extends Component<{}, any> {
   state = {
     fields: {
       user: {
-        value: []
-      }
-    }
+        value: [],
+      },
+    },
   };
 
   updateFields = (changedFields: any) => {
     this.setState(({ fields }: any) => ({
-      fields: { ...fields, ...changedFields }
+      fields: { ...fields, ...changedFields },
     }));
   };
 
@@ -31,8 +31,8 @@ export default class DemoOnly extends Component<{}, any> {
     this.setState(({ fields }: any) => ({
       fields: {
         ...fields,
-        user: { value: [] }
-      }
+        user: { value: [] },
+      },
     }));
   };
 
@@ -58,9 +58,10 @@ export default class DemoOnly extends Component<{}, any> {
             onClear: this.handleClear,
             submitText: "搜索",
             // submitDisabled: true,
-            onSubmit: this.handleSubmit
+            onSubmit: this.handleSubmit,
           }}
           onFormChange={this.updateFields}
+          onValuesChange={console.log}
           defaultRenderFormItemCount={1}
           formItems={[
             {
@@ -72,7 +73,7 @@ export default class DemoOnly extends Component<{}, any> {
                 <Input
                 // style={{ width: "100%" }}
                 />
-              )
+              ),
             },
             {
               // itemSpan: 24,
@@ -85,28 +86,27 @@ export default class DemoOnly extends Component<{}, any> {
                   dataSource={[
                     {
                       label: "Li Ning",
-                      value: "li-ning"
+                      value: "li-ning",
                     },
                     {
                       label: "Adidas",
-                      value: "adidas"
-                    }
+                      value: "adidas",
+                    },
                   ]}
                 />
-              )
+              ),
             },
             {
               // itemSpan: 24,
               label: "用户",
               id: "user",
-              decorate: false,
               control: (
                 <UserSelect
                   value={this.state.fields.user.value}
                   onSelectUser={this.handleSelectUser}
                 />
-              )
-            }
+              ),
+            },
           ]}
         />
         <div style={{ margin: "15px 0", borderBottom: "1px solid #ededed" }} />

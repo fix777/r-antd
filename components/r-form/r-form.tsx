@@ -5,7 +5,7 @@ import {
   FormProps,
   WrappedFormUtils,
   GetFieldDecoratorOptions,
-  FormComponentProps
+  FormComponentProps,
 } from "antd/lib/form/Form";
 import { FormItemProps } from "antd/lib/form/FormItem";
 
@@ -44,6 +44,7 @@ export interface RFormProps extends FormProps {
   renderFormItemCount?: number;
   footer?: boolean | RFormFooter;
   onFormChange?(changedFields: any): void; // Only includes decorated form control.
+  onValuesChange?(first: [string, any], values: any): void; // Trigger when form item control value changed.
 }
 
 export interface RFormState {
@@ -53,7 +54,7 @@ export interface RFormState {
 export class RForm extends Component<RFormProps, RFormState> {
   static defaultProps: Partial<RFormProps> = {
     formItemGutter: 10,
-    defaultRenderFormItemCount: 0
+    defaultRenderFormItemCount: 0,
   };
 
   constructor(props: RFormProps) {
@@ -61,14 +62,14 @@ export class RForm extends Component<RFormProps, RFormState> {
 
     const getRenderCount = ({
       defaultRenderFormItemCount = 0,
-      renderFormItemCount
+      renderFormItemCount,
     }: RFormProps) => {
       if (typeof renderFormItemCount == "number") return renderFormItemCount;
       return defaultRenderFormItemCount;
     };
 
     this.state = {
-      renderCount: getRenderCount(props)
+      renderCount: getRenderCount(props),
     };
   }
 
@@ -109,7 +110,7 @@ export class RForm extends Component<RFormProps, RFormState> {
 
     const DEFAULT_FORMITEM_LAYOUT = {
       labelCol: { span: 4 },
-      wrapperCol: { span: 20 }
+      wrapperCol: { span: 20 },
     };
 
     const formItemLayout = ["vertical", "inline"].includes(layout)
@@ -123,7 +124,7 @@ export class RForm extends Component<RFormProps, RFormState> {
         id = "r-form-item-uuid",
         decoratorOptions,
         control,
-        ...rest
+        ...rest,
       }: RFormItemProps,
       i: number
     ) => {
@@ -134,7 +135,7 @@ export class RForm extends Component<RFormProps, RFormState> {
         !formItemControl.props.size
       ) {
         formItemControl = React.cloneElement(formItemControl, {
-          size: "default"
+          size: "default",
         });
       }
       if (decorate)
@@ -160,7 +161,7 @@ export class RForm extends Component<RFormProps, RFormState> {
     const {
       defaultRenderFormItemCount = 0,
       renderFormItemCount,
-      footer = {}
+      footer = {},
     } = this.props;
     const { onAdvancedToggle } = footer as RFormFooter;
     const { renderCount = 0 } = this.state;
@@ -191,7 +192,7 @@ export class RForm extends Component<RFormProps, RFormState> {
       submitDisabled = false,
       showAdvancedToggle = false,
       advancedToggleTexts = ["Expand", "Collapse"],
-      onSubmit
+      onSubmit,
     } = footer as RFormFooter;
 
     const renderExtra = () => {
@@ -252,7 +253,8 @@ export class RForm extends Component<RFormProps, RFormState> {
       "defaultRenderFormItemCount",
       "renderFormItemCount",
       "footer",
-      "onFormChange"
+      "onFormChange",
+      "onValuesChange",
     ]);
 
     return (
@@ -269,7 +271,13 @@ const WrappedForm = Form.create<RFormProps>({
   onFieldsChange({ onFormChange }, changedFields: any) {
     if (typeof onFormChange != "function") return;
     onFormChange(changedFields);
-  }
+  },
+  onValuesChange({ onValuesChange }, values: any) {
+    if (typeof values != "object") return;
+    const [first] = Object.entries(values);
+    if (typeof onValuesChange != "function") return;
+    onValuesChange(first, values);
+  },
 })(RForm as any);
 
 export default WrappedForm;
