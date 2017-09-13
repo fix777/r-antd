@@ -2,12 +2,10 @@
   "name": "r-antd",
   "version": "0.1.17",
   "description": "",
-  "main": "lib/components/index.js",
-  "typings": "lib/components/index.d.ts",
-  "keywords": [
-    "react",
-    "antd"
-  ],
+  "main": "lib/index.js",
+  "module": "es/index.js",
+  "typings": "lib/index.d.ts",
+  "keywords": ["react", "antd"],
   "author": "fix777 <wangguoguo.lan@gmail.com>",
   "repository": {
     "type": "git",
@@ -19,10 +17,10 @@
   "homepage": "https://github.com/fix777/r-antd#readme",
   "license": "MIT",
   "scripts": {
-    "lib": "webpack --env.env=prod && gulp addCssjs",
+    "build": "gulp && gulp css2",
     "dev": "webpack-dev-server --env.env=dev",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "prepublish": "yarn lib"
+    "prepublish": "yarn build"
   },
   "devDependencies": {
     "@types/node": "8.0.22",
@@ -40,11 +38,15 @@
     "directory-tree": "^2.0.0",
     "extract-text-webpack-plugin": "^3.0.0",
     "gulp": "^3.9.1",
+    "gulp-babel": "^7.0.0",
+    "gulp-less": "^3.3.2",
+    "gulp-typescript": "^3.2.2",
     "html-webpack-plugin": "^2.30.1",
     "html-webpack-template": "^5.6.0",
     "less": "^2.7.2",
     "less-loader": "^4.0.5",
     "lodash.omit": "^4.5.0",
+    "merge2": "^1.2.0",
     "prop-types": "^15.5.10",
     "react": "^15.6.1",
     "react-dom": "^15.6.1",
