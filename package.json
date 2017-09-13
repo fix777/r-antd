@@ -1,6 +1,6 @@
 {
   "name": "r-antd",
-  "version": "0.1.16",
+  "version": "0.1.17",
   "description": "",
   "main": "lib/components/index.js",
   "typings": "lib/components/index.d.ts",
