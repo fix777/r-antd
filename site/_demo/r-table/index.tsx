@@ -1,6 +1,6 @@
 import React from "react";
 
-import { RTable, } from "./../../../components";
+import { RTable } from "./../../../es";
 
 const DemoOnly = () => (
   <div>
@@ -20,7 +20,7 @@ const DemoOnly = () => (
             console.log(text);
             return b;
           },
-          render: text => <a>{ text }</a>,
+          render: text => <a>{text}</a>,
         },
         {
           title: "B",
@@ -30,7 +30,8 @@ const DemoOnly = () => (
       ]}
       dataSource={[
         {
-          a: "This is aThis is aThis is aThis is aThis is aThis is aThis is aThis is aThis is aThis is",
+          a:
+            "This is aThis is aThis is aThis is aThis is aThis is aThis is aThis is aThis is aThis is",
           b: "This is b",
         },
         {

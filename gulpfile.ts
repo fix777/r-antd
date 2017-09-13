@@ -9,7 +9,7 @@ import * as less from "gulp-less";
 
 import paths, { resolveApp } from "./build-utils/paths";
 
-const tsProject = ts.createProject("tsconfig.json");
+const tsProject = ts.createProject("tsconfig.json", { jsx: "react" });
 
 const loopStyleDirs = (
   src: any[] = [],
@@ -42,14 +42,16 @@ gulp.task("es", () => {
   const tsResult = gulp.src("components/**/*.tsx").pipe(tsProject());
   return merge([
     tsResult.dts.pipe(gulp.dest("es")),
-    tsResult.js.pipe(
-      gulp.dest((file: any) => {
-        file.extname = ".js";
-        return "es";
-      })
-    ),
+    tsResult.js.pipe(gulp.dest("es")),
   ]);
 });
+
+// gulp.task("es", ["ts"], () => {
+//   gulp
+//     .src("ts/**/*.jsx")
+//     .pipe(babel({ presets: ["es2015", "react"] }))
+//     .pipe(gulp.dest("es"));
+// });
 
 gulp.task("addCssjs", ["es"], () => {
   const { children } = dirTree(paths.es);

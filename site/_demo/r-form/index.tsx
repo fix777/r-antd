@@ -5,8 +5,6 @@ import { Input } from "antd";
 import { RForm, RSelect } from "./../../../components";
 import UserSelect from "./../r-multi-select";
 
-import "./../../../lib/components/r-form/style/css";
-
 export default class DemoOnly extends Component<{}, any> {
   state = {
     fields: {
