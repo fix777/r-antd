@@ -11,7 +11,7 @@
   resolved "https://registry.yarnpkg.com/@types/react-dom/-/react-dom-15.5.2.tgz#f7203c75a1728812355f037ea112611d082555e6"
   dependencies:
     "@types/node" "*"
-    "@types/react" "15.6.1"
+    "@types/react" "*"
 
 "@types/react@15.6.1":
   version "15.6.1"
@@ -5354,6 +5354,10 @@ tsconfig@^6.0.0:
 tslib@^1.7.1:
   version "1.7.1"
   resolved "https://registry.yarnpkg.com/tslib/-/tslib-1.7.1.tgz#bc8004164691923a79fe8378bbeb3da2017538ec"
+
+tslint-config-prettier@1.5.0:
+  version "1.5.0"
+  resolved "https://registry.yarnpkg.com/tslint-config-prettier/-/tslint-config-prettier-1.5.0.tgz#76645425edcc34d9b6835ba58266eaf90fdbfeda"
 
 tslint@^5.6.0:
   version "5.6.0"

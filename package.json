@@ -4,10 +4,7 @@
   "description": "",
   "main": "lib/components/index.js",
   "typings": "lib/components/index.d.ts",
-  "keywords": [
-    "react",
-    "antd"
-  ],
+  "keywords": ["react", "antd"],
   "author": "fix777 <wangguoguo.lan@gmail.com>",
   "repository": {
     "type": "git",
@@ -52,6 +49,7 @@
     "ts-loader": "^2.3.2",
     "ts-node": "^3.3.0",
     "tslint": "^5.6.0",
+    "tslint-config-prettier": "1.5.0",
     "typescript": "^2.4.2",
     "webpack": "^3.5.4",
     "webpack-dev-server": "^2.7.1",

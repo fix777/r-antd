@@ -11,34 +11,35 @@ export default class DemoOnly extends Component<{}, any> {
   state = {
     fields: {
       user: {
-        value: [],
-      },
-    },
+        value: []
+      }
+    }
   };
 
   updateFields = (changedFields: any) => {
-    this.setState(
-      ({ fields }: any) => ({ fields: { ...fields, ...changedFields } })
-    );
-  }
+    this.setState(({ fields }: any) => ({
+      fields: { ...fields, ...changedFields }
+    }));
+  };
 
   handleSelectUser = (userNames: string[]) => {
     this.updateFields({ user: { value: userNames } });
-  }
+  };
 
   handleClear = () => {
     // 手动清除无法 decorate 的 form control 的 value
-    this.setState(
-      ({ fields }: any) => ({ fields: Object.assign({}, fields, {
-        user: { value: [] },
-      }) })
-    );
-  }
+    this.setState(({ fields }: any) => ({
+      fields: {
+        ...fields,
+        user: { value: [] }
+      }
+    }));
+  };
 
   handleSubmit = () => {
     // tslint:disable-next-line:no-console
     console.log("Fields: ", this.state.fields);
-  }
+  };
 
   render() {
     return (
@@ -56,7 +57,8 @@ export default class DemoOnly extends Component<{}, any> {
             clearText: "清空",
             onClear: this.handleClear,
             submitText: "搜索",
-            onSubmit: this.handleSubmit,
+            // submitDisabled: true,
+            onSubmit: this.handleSubmit
           }}
           onFormChange={this.updateFields}
           defaultRenderFormItemCount={1}
@@ -68,9 +70,9 @@ export default class DemoOnly extends Component<{}, any> {
               decorate: true,
               control: (
                 <Input
-                  // style={{ width: "100%" }}
+                // style={{ width: "100%" }}
                 />
-              ),
+              )
             },
             {
               // itemSpan: 24,
@@ -83,15 +85,15 @@ export default class DemoOnly extends Component<{}, any> {
                   dataSource={[
                     {
                       label: "Li Ning",
-                      value: "li-ning",
+                      value: "li-ning"
                     },
                     {
                       label: "Adidas",
-                      value: "adidas",
-                    },
+                      value: "adidas"
+                    }
                   ]}
                 />
-              ),
+              )
             },
             {
               // itemSpan: 24,
@@ -103,21 +105,13 @@ export default class DemoOnly extends Component<{}, any> {
                   value={this.state.fields.user.value}
                   onSelectUser={this.handleSelectUser}
                 />
-              ),
-            },
+              )
+            }
           ]}
         />
         <div style={{ margin: "15px 0", borderBottom: "1px solid #ededed" }} />
         <label htmlFor="pre-fields">this.state.fields:</label>
-        <pre id="pre-fields">
-          {
-            JSON.stringify(
-              this.state.fields,
-              null,
-              2
-            )
-          }
-        </pre>
+        <pre id="pre-fields">{JSON.stringify(this.state.fields, null, 2)}</pre>
       </div>
     );
   }
