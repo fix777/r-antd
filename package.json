@@ -5,10 +5,7 @@
   "main": "lib/index.js",
   "module": "es/index.js",
   "typings": "lib/index.d.ts",
-  "keywords": [
-    "react",
-    "antd"
-  ],
+  "keywords": ["react", "antd"],
   "author": "fix777 <wangguoguo.lan@gmail.com>",
   "repository": {
     "type": "git",
@@ -22,7 +19,7 @@
   "scripts": {
     "build": "gulp && gulp css2",
     "compile": "antd-tools run compile",
-    "dev": "webpack-dev-server --env.env=dev",
+    "dev": "BABEL_ENV=dev webpack-dev-server --env.env=dev",
     "test": "echo \"Error: no test specified\" && exit 1",
     "prepublish": "yarn compile"
   },

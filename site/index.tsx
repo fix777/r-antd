@@ -33,19 +33,17 @@ class App extends React.Component<{}, any> {
     }
     const DemoOnly = require(`./_demo/${current}`).default;
     this.setState({ current, content: <DemoOnly /> });
-  }
+  };
 
   handleSiderMenuClick = ({ key }) => {
     const searchParams = new URLSearchParams(location.search);
     searchParams.set("comp", key);
     window.history.replaceState({}, "", `${location.pathname}?${searchParams}`);
     this.renderContent();
-  }
+  };
 
   render() {
-    const {
-      current,
-    } = this.state;
+    const { current } = this.state;
 
     return (
       <Layout>
@@ -78,7 +76,11 @@ class App extends React.Component<{}, any> {
                 {
                   type: "submenu",
                   key: "comp",
-                  title: <span><Icon type="appstore-o" />Component</span>,
+                  title: (
+                    <span>
+                      <Icon type="appstore-o" />Component
+                    </span>
+                  ),
                   children: [
                     {
                       type: "menuitem",
@@ -105,6 +107,11 @@ class App extends React.Component<{}, any> {
                       key: "r-table",
                       children: "RTable",
                     },
+                    {
+                      type: "menuitem",
+                      key: "r-table-transfer",
+                      children: "RTableTransfer",
+                    },
                   ] as any,
                 },
               ]}
@@ -114,11 +121,9 @@ class App extends React.Component<{}, any> {
             <Breadcrumb style={{ margin: "12px 0" }}>
               <Breadcrumb.Item>Documentation</Breadcrumb.Item>
               <Breadcrumb.Item>Component</Breadcrumb.Item>
-              <Breadcrumb.Item>{ current }</Breadcrumb.Item>
+              <Breadcrumb.Item>{current}</Breadcrumb.Item>
             </Breadcrumb>
-            <Content className="content">
-              { this.state.content }
-            </Content>
+            <Content className="content">{this.state.content}</Content>
           </Layout>
         </Layout>
       </Layout>
@@ -126,7 +131,4 @@ class App extends React.Component<{}, any> {
   }
 }
 
-render(
-  <App />,
-  document.querySelector("#react-root")
-);
+render(<App />, document.querySelector("#react-root"));

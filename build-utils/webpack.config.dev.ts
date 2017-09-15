@@ -15,6 +15,7 @@ const commonConfig: webpack.Configuration = {
     publicPath: "/",
     filename: "bundle.js",
   },
+  devtool: "cheap-module-eval-source-map",
   devServer: {
     // hot: true,
     port: 7777,
@@ -37,11 +38,9 @@ const commonConfig: webpack.Configuration = {
       inject: false,
       template: HtmlWebpackTemplate,
       appMountId: "react-root",
-      links: [
-        "http://cdnjs.cloudflare.com/ajax/libs/antd/2.12.6/antd.min.css"
-      ]
+      links: ["http://cdnjs.cloudflare.com/ajax/libs/antd/2.12.6/antd.min.css"],
     }),
-  ]
+  ],
 };
 
 export default commonConfig;
