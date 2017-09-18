@@ -85,14 +85,26 @@ export class RTable<T> extends Component<RTableProps<T>, {}> {
     const scrollThNodes: NodeListOf<Element> = tableDomNode.querySelectorAll(
       "div.ant-table-scroll th"
     );
-    const fixedThNodes: NodeListOf<Element> = tableDomNode.querySelectorAll(
-      "div.ant-table-body-inner th"
+    const fixedHeaderColNodes: NodeListOf<
+      Element
+    > = tableDomNode.querySelectorAll(
+      "div.ant-table-fixed-left div.ant-table-header col"
+    );
+    const fixedBodyColNodes: NodeListOf<
+      Element
+    > = tableDomNode.querySelectorAll(
+      "div.ant-table-fixed-left div.ant-table-body-inner col"
     );
     const scrollThs = Array.from(scrollThNodes);
     Array.from(
-      fixedThNodes
-    ).forEach((ft: HTMLTableHeaderCellElement, i: number) => {
-      ft.style.width = `${scrollThs[i].clientWidth}px`;
+      fixedHeaderColNodes
+    ).forEach((fhc: HTMLTableHeaderCellElement, i: number) => {
+      fhc.style.width = `${scrollThs[i].clientWidth}px`;
+    });
+    Array.from(
+      fixedBodyColNodes
+    ).forEach((fbc: HTMLTableHeaderCellElement, i: number) => {
+      fbc.style.width = `${scrollThs[i].clientWidth}px`;
     });
   };
 
