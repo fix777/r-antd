@@ -1,6 +1,6 @@
 import React from "react";
 
-import { RTable } from "./../../../es";
+import { RTable } from "./../../../components";
 
 const DemoOnly = () => (
   <div>
@@ -25,14 +25,50 @@ const DemoOnly = () => (
         {
           title: "B",
           dataIndex: "b",
-          width: 2000,
+          width: 200,
+          tooltip: true,
+        },
+        {
+          title: "C",
+          dataIndex: "c",
+          width: 200,
+          tooltip: true,
+        },
+        {
+          title: "D",
+          dataIndex: "d",
+          width: 200,
+          tooltip: true,
+        },
+        {
+          title: "E",
+          dataIndex: "e",
+          width: 200,
+          tooltip: true,
         },
       ]}
       dataSource={[
         {
-          a:
-            "This is aThis is aThis is aThis is aThis is aThis is aThis is aThis is aThis is aThis is",
-          b: "This is b",
+          a: `Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+            Aperiam aliquam cum placeat reprehenderit. Aperiam facilis
+            reprehenderit enim nam dolores ducimus neque,
+            molestiae nostrum omnis aut, fuga autem perspiciatis veniam aliquam!`,
+          b: `Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+            Aperiam aliquam cum placeat reprehenderit. Aperiam facilis
+            reprehenderit enim nam dolores ducimus neque,
+            molestiae nostrum omnis aut, fuga autem perspiciatis veniam aliquam!`,
+          c: `Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+            Aperiam aliquam cum placeat reprehenderit. Aperiam facilis
+            reprehenderit enim nam dolores ducimus neque,
+            molestiae nostrum omnis aut, fuga autem perspiciatis veniam aliquam!`,
+          d: `Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+            Aperiam aliquam cum placeat reprehenderit. Aperiam facilis
+            reprehenderit enim nam dolores ducimus neque,
+            molestiae nostrum omnis aut, fuga autem perspiciatis veniam aliquam!`,
+          e: `Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+            Aperiam aliquam cum placeat reprehenderit. Aperiam facilis
+            reprehenderit enim nam dolores ducimus neque,
+            molestiae nostrum omnis aut, fuga autem perspiciatis veniam aliquam!`,
         },
         {
           a: "This is A",

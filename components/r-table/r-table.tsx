@@ -1,41 +1,48 @@
-import React, {
-  Component,
-  CSSProperties,
-  ReactNode,
-} from "react";
+import React, { Component, CSSProperties, ReactNode } from "react";
+import omit from "lodash.omit";
 import { Table } from "antd";
-import {
-  TableProps,
-  TableColumnConfig,
-} from "antd/lib/table/table";
+import { TableProps, TableColumnConfig } from "antd/lib/table/table";
 
-import {
-  wrapTooltip,
-  insertIndexAsKey,
-} from "./../__util";
+import { wrapTooltip, insertIndexAsKey } from "./../__util";
 
-export const mapColumns = (columns: any[] = []) => columns.map(column => {
-  const { tooltip = false, renderTooltip, width, render } = column;
-  if (!tooltip) return column;
-  if (!width) throw new Error("Ops, width is required when you need wrap tooltip!");
-  return Object.assign({}, column, {
-    render: wrapTooltip({
-      maxWidth: Number(width) - 20,
-      preRender: render,
-      renderTooltip,
-    }),
+const hasFixedColumn = (columns: any[] = []) =>
+  columns.some(({ fixed }) => !!fixed);
+
+const mapColumns = (columns: any[] = []) =>
+  columns.map(column => {
+    const { tooltip = false, renderTooltip, maxWidth, width, render } = column;
+    if (!tooltip) return column;
+    if (!width && !maxWidth) {
+      throw new Error(
+        "Ops, width or maxWidth is required when you need wrap tooltip!"
+      );
+    }
+    const nextColumn = {
+      ...column,
+      render: wrapTooltip({
+        maxWidth: Number(maxWidth || width) - 20,
+        preRender: render,
+        renderTooltip,
+      }),
+    };
+    return omit(nextColumn, ["maxWidth", "tooltip", "renderTooltip"]);
   });
-});
 
-export const scrollX = (props: RTableProps<{}>): undefined | number => {
-  const {
-    columns = [],
-    rowSelection,
-    expandedRowRender,
-  } = props;
+const removeUnnecessaryColumnWidth = (columns: any[] = []) => {
+  if (!hasFixedColumn(columns)) return columns;
+  return columns.map(column => {
+    if ("fixed" in column) {
+      return column;
+    }
+    return omit(column, ["width"]);
+  });
+};
 
-  const hasFixedColumn = columns.some(({ fixed }) => !!fixed);
-  if (!hasFixedColumn) return;
+const scrollX = (props: RTableProps<{}>): undefined | number => {
+  const { columns = [], rowSelection, expandedRowRender } = props;
+
+  // const hasFixedColumn = columns.some(({ fixed }) => !!fixed);
+  if (!hasFixedColumn(columns)) return;
 
   let hasCheckbox = false;
   if (typeof rowSelection == "object" && rowSelection) hasCheckbox = true;
@@ -44,15 +51,18 @@ export const scrollX = (props: RTableProps<{}>): undefined | number => {
   if (hasCheckbox) initalWidth += 62;
   if (typeof expandedRowRender == "function") initalWidth += 50;
 
-  const unFixedColumnWidthSum =
-    columns
-      // .filter(({ fixed }) => !fixed)
-      .reduce((widthSum: number, { width = 0 }) => widthSum + Number(width), initalWidth);
+  const unFixedColumnWidthSum = columns
+    // .filter(({ fixed }) => !fixed)
+    .reduce(
+      (widthSum: number, { width = 0 }) => widthSum + Number(width),
+      initalWidth
+    );
   // console.log(unFixedColumnWidthSum);
   return unFixedColumnWidthSum;
 };
 
 export interface RColumnsProps<T> extends TableColumnConfig<T> {
+  maxWidth?: number;
   tooltip?: boolean;
   renderTooltip?(text?: any, record?: any, index?: number): ReactNode;
 }
@@ -70,14 +80,15 @@ export class RTable<T> extends Component<RTableProps<T>, {}> {
       columns,
       pagination,
       scroll,
-      ...others
+      ...others,
     } = this.props;
 
     let rest = others;
     if (!others.rowKey) {
-      rest = Object.assign({}, rest, {
+      rest = {
+        ...rest,
         dataSource: insertIndexAsKey(others.dataSource),
-      });
+      };
     }
     if (!pagination) {
       rest = Object.assign({}, rest, {
@@ -87,23 +98,25 @@ export class RTable<T> extends Component<RTableProps<T>, {}> {
 
     const xWidth = scrollX(this.props);
 
-    const defaultStyle: Partial<CSSProperties> = fixedMaxWidth ? { maxWidth: xWidth || "100%" } : {};
+    const defaultStyle: Partial<CSSProperties> = fixedMaxWidth
+      ? { maxWidth: xWidth || "100%" }
+      : {};
 
     return (
       <Table
         style={{ ...style, ...defaultStyle }}
         size="middle"
-        columns={mapColumns(columns)}
+        columns={removeUnnecessaryColumnWidth(mapColumns(columns))}
         pagination={{
           showSizeChanger: true,
-          pageSizeOptions: ["10", "20", "50", "100", "500", "1000"],
+          pageSizeOptions: ["5", "10", "20", "50", "100", "500", "1000"],
           showQuickJumper: true,
           showTotal: (total, [start, end]) => `${start}-${end} / ${total}`,
-          ...pagination as any
+          ...pagination as any,
         }}
         scroll={{
           x: xWidth,
-          ...scroll
+          ...scroll,
         }}
         {...rest}
       />
