@@ -20,6 +20,7 @@ const wrapTooltip = ({ maxWidth, preRender, renderTooltip }: ParamObject) => (
     <Tooltip placement="topLeft" title={tooltipTitle}>
       <div
         style={{
+          display: "table-cell",
           maxWidth,
           textOverflow: "ellipsis",
           overflow: "hidden",

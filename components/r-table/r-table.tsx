@@ -1,4 +1,5 @@
 import React, { Component, CSSProperties, ReactNode } from "react";
+import { findDOMNode } from "react-dom";
 import omit from "lodash.omit";
 import { Table } from "antd";
 import { TableProps, TableColumnConfig } from "antd/lib/table/table";
@@ -28,15 +29,15 @@ const mapColumns = (columns: any[] = []) =>
     return omit(nextColumn, ["maxWidth", "tooltip", "renderTooltip"]);
   });
 
-const removeUnnecessaryColumnWidth = (columns: any[] = []) => {
-  if (!hasFixedColumn(columns)) return columns;
-  return columns.map(column => {
-    if ("fixed" in column) {
-      return column;
-    }
-    return omit(column, ["width"]);
-  });
-};
+// const removeUnnecessaryColumnWidth = (columns: any[] = []) => {
+//   if (!hasFixedColumn(columns)) return columns;
+//   return columns.map(column => {
+//     if ("fixed" in column) {
+//       return column;
+//     }
+//     return omit(column, ["width"]);
+//   });
+// };
 
 const scrollX = (props: RTableProps<{}>): undefined | number => {
   const { columns = [], rowSelection, expandedRowRender } = props;
@@ -73,6 +74,28 @@ export interface RTableProps<T> extends TableProps<T> {
 }
 
 export class RTable<T> extends Component<RTableProps<T>, {}> {
+  private table: any;
+
+  componentDidMount() {
+    this.fixFixedFirstThWidth();
+  }
+
+  fixFixedFirstThWidth = () => {
+    const tableDomNode = findDOMNode(this.table);
+    const scrollThNodes: NodeListOf<Element> = tableDomNode.querySelectorAll(
+      "div.ant-table-scroll th"
+    );
+    const fixedThNodes: NodeListOf<Element> = tableDomNode.querySelectorAll(
+      "div.ant-table-body-inner th"
+    );
+    const scrollThs = Array.from(scrollThNodes);
+    Array.from(
+      fixedThNodes
+    ).forEach((ft: HTMLTableHeaderCellElement, i: number) => {
+      ft.style.width = `${scrollThs[i].clientWidth}px`;
+    });
+  };
+
   render() {
     const {
       fixedMaxWidth = false,
@@ -104,9 +127,10 @@ export class RTable<T> extends Component<RTableProps<T>, {}> {
 
     return (
       <Table
+        ref={table => (this.table = table)}
         style={{ ...style, ...defaultStyle }}
         size="middle"
-        columns={removeUnnecessaryColumnWidth(mapColumns(columns))}
+        columns={mapColumns(columns)}
         pagination={{
           showSizeChanger: true,
           pageSizeOptions: ["5", "10", "20", "50", "100", "500", "1000"],

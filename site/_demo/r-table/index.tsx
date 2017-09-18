@@ -26,6 +26,7 @@ const DemoOnly = () => (
           title: "B",
           dataIndex: "b",
           width: 200,
+          fixed: "left",
           tooltip: true,
         },
         {
