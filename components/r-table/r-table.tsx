@@ -29,15 +29,15 @@ const mapColumns = (columns: any[] = []) =>
     return omit(nextColumn, ["maxWidth", "tooltip", "renderTooltip"]);
   });
 
-// const removeUnnecessaryColumnWidth = (columns: any[] = []) => {
-//   if (!hasFixedColumn(columns)) return columns;
-//   return columns.map(column => {
-//     if ("fixed" in column) {
-//       return column;
-//     }
-//     return omit(column, ["width"]);
-//   });
-// };
+const removeColumnFixedProps = (columns: any[] = []) => {
+  if (!hasFixedColumn(columns)) return columns;
+  return columns.map(column => {
+    if ("fixed" in column) {
+      return omit(column, ["fixed"]);
+    }
+    return column;
+  });
+};
 
 const scrollX = (props: RTableProps<{}>): undefined | number => {
   const { columns = [], rowSelection, expandedRowRender } = props;
@@ -73,50 +73,39 @@ export interface RTableProps<T> extends TableProps<T> {
   columns: Array<RColumnsProps<T>>;
 }
 
-export class RTable<T> extends Component<RTableProps<T>, {}> {
+export interface RTableState {
+  shouldRemoveColumnFixedProps: boolean;
+}
+
+export class RTable<T> extends Component<RTableProps<T>, RTableState> {
+  state: RTableState = {
+    shouldRemoveColumnFixedProps: false,
+  };
+
   private table: any;
 
   componentDidMount() {
-    this.fixFixedFirstThWidth();
-  }
-
-  fixFixedFirstThWidth = () => {
     const tableDomNode = findDOMNode(this.table);
-    const scrollThNodes: NodeListOf<Element> = tableDomNode.querySelectorAll(
-      "div.ant-table-scroll th"
-    );
-    const fixedHeaderColNodes: NodeListOf<
-      Element
-    > = tableDomNode.querySelectorAll(
-      "div.ant-table-fixed-left div.ant-table-header col"
-    );
-    const fixedBodyColNodes: NodeListOf<
-      Element
-    > = tableDomNode.querySelectorAll(
-      "div.ant-table-fixed-left div.ant-table-body-inner col"
-    );
-    const scrollThs = Array.from(scrollThNodes);
-    Array.from(
-      fixedHeaderColNodes
-    ).forEach((fhc: HTMLTableHeaderCellElement, i: number) => {
-      fhc.style.width = `${scrollThs[i].clientWidth}px`;
-    });
-    Array.from(
-      fixedBodyColNodes
-    ).forEach((fbc: HTMLTableHeaderCellElement, i: number) => {
-      fbc.style.width = `${scrollThs[i].clientWidth}px`;
-    });
-  };
+    const xWidth = scrollX(this.props) || 0;
+    if (tableDomNode.clientWidth - xWidth > 0) {
+      this.setState({ shouldRemoveColumnFixedProps: true });
+    }
+  }
 
   render() {
     const {
       fixedMaxWidth = false,
       style,
       columns,
-      pagination,
       scroll,
       ...others,
     } = this.props;
+    const { shouldRemoveColumnFixedProps } = this.state;
+
+    let nextColumns = mapColumns(columns);
+    if (shouldRemoveColumnFixedProps) {
+      nextColumns = removeColumnFixedProps(nextColumns);
+    }
 
     let rest = others;
     if (!others.rowKey) {
@@ -125,11 +114,11 @@ export class RTable<T> extends Component<RTableProps<T>, {}> {
         dataSource: insertIndexAsKey(others.dataSource),
       };
     }
-    if (!pagination) {
-      rest = Object.assign({}, rest, {
-        pagination,
-      });
-    }
+    // if (!pagination) {
+    //   rest = Object.assign({}, rest, {
+    //     pagination,
+    //   });
+    // }
 
     const xWidth = scrollX(this.props);
 
@@ -142,13 +131,13 @@ export class RTable<T> extends Component<RTableProps<T>, {}> {
         ref={table => (this.table = table)}
         style={{ ...style, ...defaultStyle }}
         size="middle"
-        columns={mapColumns(columns)}
+        columns={nextColumns}
         pagination={{
           showSizeChanger: true,
           pageSizeOptions: ["5", "10", "20", "50", "100", "500", "1000"],
           showQuickJumper: true,
           showTotal: (total, [start, end]) => `${start}-${end} / ${total}`,
-          ...pagination as any,
+          ...rest.pagination as any,
         }}
         scroll={{
           x: xWidth,

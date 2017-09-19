@@ -6,7 +6,7 @@ const DemoOnly = () => (
   <div>
     <h1>Hello world...</h1>
     <RTable
-      pagination={false}
+      pagination={true}
       fixedMaxWidth={false}
       columns={[
         {
@@ -44,7 +44,7 @@ const DemoOnly = () => (
         {
           title: "E",
           dataIndex: "e",
-          width: 200,
+          width: 300,
           tooltip: true,
         },
       ]}
@@ -110,26 +110,6 @@ const DemoOnly = () => (
         {
           a: "This is a",
           b: "This is b",
-        },
-        {
-          a: "This is A",
-          b: "This is B",
-        },
-        {
-          a: "This is a",
-          b: "This is b",
-        },
-        {
-          a: "This is A",
-          b: "This is B",
-        },
-        {
-          a: "This is a",
-          b: "This is b",
-        },
-        {
-          a: "This is A",
-          b: "This is B",
         },
       ]}
       rowSelection={{
