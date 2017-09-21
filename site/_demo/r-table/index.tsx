@@ -6,7 +6,9 @@ const DemoOnly = () => (
   <div>
     <h1>Hello world...</h1>
     <RTable
-      pagination={true}
+      pagination={{
+        total: 111,
+      }}
       fixedMaxWidth={false}
       columns={[
         {

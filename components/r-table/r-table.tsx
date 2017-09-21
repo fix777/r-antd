@@ -92,6 +92,19 @@ export class RTable<T> extends Component<RTableProps<T>, RTableState> {
     }
   }
 
+  getPagination = () => {
+    const { pagination } = this.props;
+    if (typeof pagination == "boolean") return pagination;
+    if (!pagination) return false;
+    return {
+      showSizeChanger: true,
+      pageSizeOptions: ["6", "10", "20", "50", "100", "500", "1000"],
+      showQuickJumper: true,
+      showTotal: (total, [start, end]) => `${start}-${end} / ${total}`,
+      ...pagination,
+    };
+  };
+
   render() {
     const {
       fixedMaxWidth = false,
@@ -107,18 +120,13 @@ export class RTable<T> extends Component<RTableProps<T>, RTableState> {
       nextColumns = removeColumnFixedProps(nextColumns);
     }
 
-    let rest = others;
+    let rest = omit(others, ["pagination"]);
     if (!others.rowKey) {
       rest = {
         ...rest,
         dataSource: insertIndexAsKey(others.dataSource),
       };
     }
-    // if (!pagination) {
-    //   rest = Object.assign({}, rest, {
-    //     pagination,
-    //   });
-    // }
 
     const xWidth = scrollX(this.props);
 
@@ -132,13 +140,7 @@ export class RTable<T> extends Component<RTableProps<T>, RTableState> {
         style={{ ...style, ...defaultStyle }}
         size="middle"
         columns={nextColumns}
-        pagination={{
-          showSizeChanger: true,
-          pageSizeOptions: ["5", "10", "20", "50", "100", "500", "1000"],
-          showQuickJumper: true,
-          showTotal: (total, [start, end]) => `${start}-${end} / ${total}`,
-          ...rest.pagination as any,
-        }}
+        pagination={this.getPagination()}
         scroll={{
           x: xWidth,
           ...scroll,
