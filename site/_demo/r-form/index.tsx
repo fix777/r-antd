@@ -65,6 +65,7 @@ export default class DemoOnly extends Component<{}, any> {
           defaultRenderFormItemCount={1}
           formItems={[
             {
+              visible: true,
               // itemSpan: 24,
               label: "WHATEVER",
               id: "whatever",
@@ -76,6 +77,7 @@ export default class DemoOnly extends Component<{}, any> {
               ),
             },
             {
+              visible: true,
               // itemSpan: 24,
               label: "品牌",
               id: "vendor",
@@ -97,6 +99,7 @@ export default class DemoOnly extends Component<{}, any> {
               ),
             },
             {
+              visible: false,
               // itemSpan: 24,
               label: "用户",
               id: "user",

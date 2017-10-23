@@ -15,6 +15,7 @@ export type FormComponentProps = FormComponentProps;
 const { Item: FormItem } = Form;
 
 export interface RFormItemProps extends FormItemProps {
+  visible?: boolean; // Current form item visibility.
   itemSpan?: number; // ColSpan, default as 8.
   decorate?: boolean; // Default as false. If true, "id" is required.
   decoratorOptions?: GetFieldDecoratorOptions; // Only worked when decorator is true.
@@ -115,12 +116,11 @@ export class RForm extends Component<RFormProps, RFormState> {
       wrapperCol: { span: 20 },
     };
 
-    const formItemLayout = ["vertical", "inline"].includes(layout)
-      ? {}
-      : DEFAULT_FORMITEM_LAYOUT;
+    const formItemLayout = ["vertical", "inline"].includes(layout) ? {} : DEFAULT_FORMITEM_LAYOUT;
 
     const renderItem = (
       {
+        visible = true,
         itemSpan = 8,
         decorate,
         id = "r-form-item-uuid",
@@ -130,6 +130,10 @@ export class RForm extends Component<RFormProps, RFormState> {
       }: RFormItemProps,
       i: number
     ) => {
+      if (!visible) {
+        return null;
+      }
+
       let formItemControl: any = control;
       if (
         formItemControl &&
@@ -140,10 +144,7 @@ export class RForm extends Component<RFormProps, RFormState> {
           size: "default",
         });
       }
-      if (decorate)
-        formItemControl = getFieldDecorator(id, decoratorOptions)(
-          formItemControl
-        );
+      if (decorate) formItemControl = getFieldDecorator(id, decoratorOptions)(formItemControl);
       return (
         <Col key={i} span={itemSpan}>
           <FormItem {...formItemLayout} {...rest}>
@@ -160,18 +161,11 @@ export class RForm extends Component<RFormProps, RFormState> {
   };
 
   onPreAdvancedToggle = () => {
-    const {
-      defaultRenderFormItemCount = 0,
-      renderFormItemCount,
-      footer = {},
-    } = this.props;
+    const { defaultRenderFormItemCount = 0, renderFormItemCount, footer = {} } = this.props;
     const { onAdvancedToggle } = footer as RFormFooter;
     const { renderCount = 0 } = this.state;
 
-    if (
-      typeof renderFormItemCount == "number" &&
-      typeof onAdvancedToggle == "function"
-    ) {
+    if (typeof renderFormItemCount == "number" && typeof onAdvancedToggle == "function") {
       return onAdvancedToggle(renderCount);
     }
 
@@ -206,9 +200,7 @@ export class RForm extends Component<RFormProps, RFormState> {
     const renderAdvancedToggle = () => {
       if (!showAdvancedToggle) return null;
 
-      const text = !renderCount
-        ? advancedToggleTexts[1]
-        : advancedToggleTexts[0];
+      const text = !renderCount ? advancedToggleTexts[1] : advancedToggleTexts[0];
 
       return (
         <a style={{ marginRight: 4 }} onClick={this.onPreAdvancedToggle}>
@@ -230,10 +222,7 @@ export class RForm extends Component<RFormProps, RFormState> {
     return (
       <Row>
         {renderExtra()}
-        <Col
-          style={{ textAlign: defaultActionAlign }}
-          span={Number(defaultActionSpan)}
-        >
+        <Col style={{ textAlign: defaultActionAlign }} span={Number(defaultActionSpan)}>
           {renderAdvancedToggle()}
           {renderClear()}
           <Button type="primary" disabled={submitDisabled} onClick={onSubmit}>
