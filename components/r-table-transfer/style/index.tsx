@@ -1,7 +1,7 @@
 import "./index.less";
 
-import "antd/lib/row/style/css";
-import "antd/lib/col/style/css";
-import "antd/lib/table/style/css";
-import "antd/lib/icon/style/css";
-import "antd/lib/button/style/css";
+import "antd/es/row/style/css";
+import "antd/es/col/style/css";
+import "antd/es/table/style/css";
+import "antd/es/icon/style/css";
+import "antd/es/button/style/css";

@@ -1,3 +1,3 @@
 import "./index.less";
 
-import "antd/lib/menu/style/css";
+import "antd/es/menu/style/css";

@@ -4,3 +4,4 @@ export { default as RSelect } from "./r-select";
 export { default as RMultiSelect } from "./r-multi-select";
 export { default as RForm } from "./r-form";
 export { default as RMenu } from "./r-menu";
+export { default as RDropdownSelect } from "./r-dropdown-select";

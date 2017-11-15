@@ -1,6 +1,6 @@
 import "./index.less";
 
-import "antd/lib/row/style/css";
-import "antd/lib/col/style/css";
-import "antd/lib/form/style/css";
-import "antd/lib/button/style/css";
+import "antd/es/row/style/css";
+import "antd/es/col/style/css";
+import "antd/es/form/style/css";
+import "antd/es/button/style/css";
