@@ -38,7 +38,7 @@ const commonConfig: webpack.Configuration = {
       inject: false,
       template: HtmlWebpackTemplate,
       appMountId: "react-root",
-      links: ["http://cdnjs.cloudflare.com/ajax/libs/antd/2.12.6/antd.min.css"],
+      // links: ["http://cdnjs.cloudflare.com/ajax/libs/antd/2.12.6/antd.min.css"],
     }),
   ],
 };
