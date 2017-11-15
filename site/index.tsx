@@ -112,6 +112,11 @@ class App extends React.Component<{}, any> {
                       key: "r-table-transfer",
                       children: "RTableTransfer",
                     },
+                    {
+                      type: "menuitem",
+                      key: "r-dropdown-select",
+                      children: "RDropdownSelect",
+                    },
                   ] as any,
                 },
               ]}
