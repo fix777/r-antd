@@ -9,6 +9,7 @@ import {
   FormComponentProps,
 } from "antd/lib/form/Form";
 import { FormItemProps } from "antd/lib/form/FormItem";
+import { ButtonProps } from "antd/lib/button/button";
 
 export type FormComponentProps = FormComponentProps;
 
@@ -30,6 +31,7 @@ export interface RFormFooter {
   clearText?: string; // Text of clear button, default as "Clear".
   submitText?: string; // Text of submit button, default as "Submit".
   submitDisabled?: boolean; // Default as "false".
+  submitExtraProps?: Partial<ButtonProps>;
   showAdvancedToggle?: boolean; // Advanced toggle flag, default as false. You need to use it with "defaultRenderFormItemCount" | "renderFormItemCount".
   advancedToggleTexts?: string[]; // Default as ["Expand", "Collapse"]
   onClear?(): void;
@@ -126,7 +128,7 @@ export class RForm extends Component<RFormProps, RFormState> {
         id = "r-form-item-uuid",
         decoratorOptions,
         control,
-        ...rest,
+        ...rest
       }: RFormItemProps,
       i: number
     ) => {
@@ -186,6 +188,7 @@ export class RForm extends Component<RFormProps, RFormState> {
       clearText = "Clear",
       submitText = "Submit",
       submitDisabled = false,
+      submitExtraProps = {},
       showAdvancedToggle = false,
       advancedToggleTexts = ["Expand", "Collapse"],
       onSubmit,
@@ -225,7 +228,7 @@ export class RForm extends Component<RFormProps, RFormState> {
         <Col style={{ textAlign: defaultActionAlign }} span={Number(defaultActionSpan)}>
           {renderAdvancedToggle()}
           {renderClear()}
-          <Button type="primary" disabled={submitDisabled} onClick={onSubmit}>
+          <Button type="primary" disabled={submitDisabled} {...submitExtraProps} onClick={onSubmit}>
             {submitText}
           </Button>
         </Col>
