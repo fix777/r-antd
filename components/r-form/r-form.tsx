@@ -1,7 +1,7 @@
 import React, { Component, ReactNode } from "react";
 import classNames from "classnames";
 import omit from "lodash.omit";
-import { Row, Col, Form, Button } from "antd";
+import { Row, Col, Form, Button, Icon } from "antd";
 import {
   FormProps,
   WrappedFormUtils,
@@ -204,10 +204,11 @@ export class RForm extends Component<RFormProps, RFormState> {
       if (!showAdvancedToggle) return null;
 
       const text = !renderCount ? advancedToggleTexts[1] : advancedToggleTexts[0];
+      const iconType = !renderCount ? "up" : "down";
 
       return (
-        <a style={{ marginRight: 4 }} onClick={this.onPreAdvancedToggle}>
-          {text}
+        <a style={{ letterSpacing: 2 }} onClick={this.onPreAdvancedToggle}>
+          {text} <Icon type={iconType} />
         </a>
       );
     };
@@ -216,7 +217,7 @@ export class RForm extends Component<RFormProps, RFormState> {
       if (!showClear) return null;
 
       return (
-        <Button style={{ marginRight: 4 }} onClick={this.onPreClear}>
+        <Button style={{ marginRight: 8 }} onClick={this.onPreClear}>
           {clearText}
         </Button>
       );
@@ -226,11 +227,13 @@ export class RForm extends Component<RFormProps, RFormState> {
       <Row>
         {renderExtra()}
         <Col style={{ textAlign: defaultActionAlign }} span={Number(defaultActionSpan)}>
-          {renderAdvancedToggle()}
           {renderClear()}
           <Button type="primary" disabled={submitDisabled} {...submitExtraProps} onClick={onSubmit}>
             {submitText}
           </Button>
+        </Col>
+        <Col span={24} style={{ textAlign: "center" }}>
+          {renderAdvancedToggle()}
         </Col>
       </Row>
     );

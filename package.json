@@ -5,10 +5,7 @@
   "main": "lib/index.js",
   "module": "es/index.js",
   "typings": "lib/index.d.ts",
-  "keywords": [
-    "react",
-    "antd"
-  ],
+  "keywords": ["react", "antd"],
   "author": "fix777 <wangguoguo.lan@gmail.com>",
   "repository": {
     "type": "git",
@@ -20,6 +17,7 @@
   "homepage": "https://github.com/fix777/r-antd#readme",
   "license": "MIT",
   "scripts": {
+    "start": "npm run compile && npm run dev",
     "build": "gulp && gulp css2",
     "compile": "antd-tools run compile",
     "dev": "BABEL_ENV=dev webpack-dev-server --env.env=dev",

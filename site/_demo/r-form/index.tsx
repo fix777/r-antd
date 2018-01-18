@@ -56,7 +56,7 @@ export default class DemoOnly extends Component<{}, any> {
             advancedToggleTexts: ["展开", "收起"],
             clearText: "清空",
             onClear: this.handleClear,
-            submitText: "搜索",
+            submitText: "查询",
             // submitDisabled: true,
             onSubmit: this.handleSubmit,
           }}
