@@ -17,23 +17,24 @@ const { Item: FormItem } = Form;
 
 export interface RFormItemProps extends FormItemProps {
   visible?: boolean; // Current form item visibility.
-  itemSpan?: number; // ColSpan, default as 8.
-  decorate?: boolean; // Default as false. If true, "id" is required.
+  itemSpan?: number; // ColSpan, default to 8.
+  decorate?: boolean; // default to false. If true, "id" is required.
   decoratorOptions?: GetFieldDecoratorOptions; // Only worked when decorator is true.
   control: ReactNode;
 }
 
 export interface RFormFooter {
-  defaultActionAlign?: "left" | "center" | "right"; // Default as "left".
-  defaultActionSpan?: number; // ColSpan, default as 24.
+  defaultActionAlign?: "left" | "center" | "right"; // default to "left".
+  defaultActionSpan?: number; // span, default to `24`.
+  defaultActionOffset?: number; // offset, default to `0`.
   extraAction?: ReactNode;
   showClear?: boolean;
-  clearText?: string; // Text of clear button, default as "Clear".
-  submitText?: string; // Text of submit button, default as "Submit".
-  submitDisabled?: boolean; // Default as "false".
+  clearText?: string; // Text of clear button, default to "Clear".
+  submitText?: string; // Text of submit button, default to "Submit".
+  submitDisabled?: boolean; // default to "false".
   submitExtraProps?: Partial<ButtonProps>;
-  showAdvancedToggle?: boolean; // Advanced toggle flag, default as false. You need to use it with "defaultRenderFormItemCount" | "renderFormItemCount".
-  advancedToggleTexts?: string[]; // Default as ["Expand", "Collapse"]
+  showAdvancedToggle?: boolean; // Advanced toggle flag, default to false. You need to use it with "defaultRenderFormItemCount" | "renderFormItemCount".
+  advancedToggleTexts?: string[]; // default to ["Expand", "Collapse"]
   onClear?(): void;
   onSubmit(): void;
   onAdvancedToggle?(prevRenderCount?: number): void;
@@ -43,9 +44,9 @@ export interface RFormProps extends FormProps {
   // form?: WrappedFormUtils;
   background?: "normal";
   header?: ReactNode;
-  formItemGutter?: number; // Row gutter, default as 10.
+  formItemGutter?: number; // Row gutter, default to 10.
   formItems: RFormItemProps[];
-  defaultRenderFormItemCount?: number; // Default as 0.
+  defaultRenderFormItemCount?: number; // default to 0.
   renderFormItemCount?: number;
   footer?: boolean | RFormFooter;
   onFormChange?(changedFields: any): void; // Only includes decorated form control.
@@ -183,6 +184,7 @@ export class RForm extends Component<RFormProps, RFormState> {
     const {
       defaultActionAlign = "left",
       defaultActionSpan = 24,
+      defaultActionOffset = 0,
       extraAction,
       showClear = false,
       clearText = "Clear",
@@ -226,7 +228,11 @@ export class RForm extends Component<RFormProps, RFormState> {
     return (
       <Row>
         {renderExtra()}
-        <Col style={{ textAlign: defaultActionAlign }} span={Number(defaultActionSpan)}>
+        <Col
+          style={{ textAlign: defaultActionAlign }}
+          span={Number(defaultActionSpan)}
+          offset={Number(defaultActionOffset)}
+        >
           {renderClear()}
           <Button type="primary" disabled={submitDisabled} {...submitExtraProps} onClick={onSubmit}>
             {submitText}
