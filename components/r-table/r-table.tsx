@@ -7,6 +7,11 @@ import { TableProps, TableColumnConfig } from "antd/lib/table/table";
 
 import { wrapTooltip, insertIndexAsKey } from "./../__util";
 
+import Export from "./export";
+
+// tslint:disable-next-line:no-empty
+const noop = () => {};
+
 const hasFixedColumn = (columns: any[] = []) => columns.some(({ fixed }) => !!fixed);
 
 const mapColumns = (columns: any[] = []) =>
@@ -87,9 +92,14 @@ export interface RColumnsProps<T> extends TableColumnConfig<T> {
 }
 
 export interface RTableProps<T> extends TableProps<T> {
+  cardTitle?: ReactNode;
   showEditColumns?: boolean; // default to `false`
+  showExport?: boolean; // default to `false`
+  exportType?: "by-one-click" | "by-config"; // default to `by-one-click`
   fixedMaxWidth?: boolean;
   columns: Array<RColumnsProps<T>>;
+
+  onExport?(checkedColumnKeys?: string[], rangeType?: "ALL" | "SELECTED"): void | boolean;
 }
 
 export interface RTableState<T> {
@@ -98,6 +108,10 @@ export interface RTableState<T> {
 }
 
 export class RTable<T> extends Component<RTableProps<T>, RTableState<T>> {
+  static defaultProps: Partial<RTableProps<{}>> = {
+    prefixCls: "r-antd_table",
+  };
+
   state: RTableState<T> = {
     shouldRemoveColumnFixedProps: false,
     columns: "columns" in this.props ? this.props.columns : [],
@@ -148,7 +162,13 @@ export class RTable<T> extends Component<RTableProps<T>, RTableState<T>> {
     });
   };
 
-  renderCardExtra = () => {
+  renderEditColumnsAction = () => {
+    const { showEditColumns } = this.props;
+
+    if (!showEditColumns) {
+      return null;
+    }
+
     const { columns } = this.state;
     const checkedColumnKeys = getCheckedColumnOrColumnKeys<T>(columns) as string[];
     const mapColumnsCheckbox = ({ key, dataIndex, title }) => {
@@ -170,13 +190,48 @@ export class RTable<T> extends Component<RTableProps<T>, RTableState<T>> {
 
     return (
       <Popover placement="bottom" trigger="click" content={columnsCheckboxGroup}>
-        <Button>列设置</Button>
+        <Button>Edit Columns</Button>
       </Popover>
     );
   };
 
+  renderExportAction = () => {
+    const { showExport } = this.props;
+
+    if (!showExport) {
+      return null;
+    }
+
+    const { columns, exportType = "by-one-click", onExport = noop } = this.props;
+
+    return <Export columns={columns} exportType={exportType} onExport={onExport} />;
+  };
+
+  renderCardTitle = () => {
+    return this.props.cardTitle;
+  };
+
+  renderCardExtra = () => {
+    const { prefixCls } = this.props;
+
+    return (
+      <div className={`${prefixCls}--card-extra`}>
+        {this.renderEditColumnsAction()}
+        {this.renderExportAction()}
+      </div>
+    );
+  };
+
   render() {
-    const { showEditColumns = false, fixedMaxWidth = false, style, scroll, ...others } = this.props;
+    const {
+      showEditColumns = false,
+      showExport = false,
+      fixedMaxWidth = false,
+      prefixCls,
+      style,
+      scroll,
+      ...others
+    } = this.props;
     const { shouldRemoveColumnFixedProps, columns } = this.state;
 
     const visibleColumns = getCheckedColumnOrColumnKeys(columns, "columns") as Array<
@@ -216,16 +271,17 @@ export class RTable<T> extends Component<RTableProps<T>, RTableState<T>> {
       />
     );
 
-    if (!showEditColumns) {
+    if (!showEditColumns && !showExport) {
       return table;
     }
 
     return (
       <Card
-        className={`r-antd_table--card`}
+        className={`${prefixCls}--card`}
         bodyStyle={{ padding: 0 }}
         bordered={false}
         noHovering
+        title={this.renderCardTitle()}
         extra={this.renderCardExtra()}
       >
         {table}

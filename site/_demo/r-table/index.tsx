@@ -1,11 +1,37 @@
 import React from "react";
+import { Button } from "antd";
 
 import { RTable } from "./../../../components";
 import "./../../../components/r-table/style";
 
+const testExport = () => {
+  /* tslint:disable */
+  console.clear();
+  console.log(
+    "You are seeing this log because of the default `exportType` is `by-one-click`, so you should implement the `onExport` event to just request the export API."
+  );
+  console.log(
+    "You can also set the `exportType` to `by-config` to enable advanced built-in export configuration modal."
+  );
+  /* tslint:enable */
+  // return false;
+};
+
+const SomeActions = () => (
+  <div>
+    <Button type="primary">EDIT</Button>
+    <span style={{ display: "inline-block", marginLeft: 16 }} />
+    <Button type="danger">DELETE</Button>
+  </div>
+);
+
 const DemoOnly = () => (
   <RTable
     showEditColumns
+    showExport
+    // exportType="by-config"
+    onExport={testExport}
+    cardTitle={<SomeActions />}
     pagination={{
       total: 111,
     }}

@@ -1,5 +1,15 @@
-.r-antd_table--card {
-  .ant-card-head {
-    padding: 0;
+@r-table-prefix-cls: ~"r-antd_table";
+
+.@{r-table-prefix-cls} {
+  &--card {
+    .ant-card-head {
+      padding: 0;
+    }
+
+    &-extra {
+      > * + * {
+        margin-left: 16px;
+      }
+    }
   }
 }
