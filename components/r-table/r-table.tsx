@@ -9,6 +9,24 @@ import { wrapTooltip, insertIndexAsKey } from "./../__util";
 
 import Export from "./export";
 
+const defaultLocale = {
+  editColumnsBtnText: "列设置",
+  exportBtnText: "导出",
+  exportModal: {
+    submitText: "提交",
+  },
+  columnsType: {
+    text: "列名",
+    all: "全部",
+    partial: "部分",
+  },
+  rangeType: {
+    text: "范围",
+    all: "全部记录",
+    selected: "选中记录",
+  },
+};
+
 // tslint:disable-next-line:no-empty
 const noop = () => {};
 
@@ -134,6 +152,18 @@ export class RTable<T> extends Component<RTableProps<T>, RTableState<T>> {
     }
   }
 
+  getLocale() {
+    let locale = {};
+    if (this.context.antLocale && this.context.antLocale.Table) {
+      locale = this.context.antLocale.Table;
+    }
+    return {
+      ...defaultLocale,
+      ...locale,
+      ...this.props.locale,
+    };
+  }
+
   getPagination = () => {
     const { pagination } = this.props;
     if (typeof pagination == "boolean") return pagination;
@@ -187,10 +217,11 @@ export class RTable<T> extends Component<RTableProps<T>, RTableState<T>> {
       );
     };
     const columnsCheckboxGroup = <div>{columns.map(mapColumnsCheckbox)}</div>;
+    const locale = this.getLocale();
 
     return (
       <Popover placement="bottom" trigger="click" content={columnsCheckboxGroup}>
-        <Button>Edit Columns</Button>
+        <Button>{locale.editColumnsBtnText}</Button>
       </Popover>
     );
   };
@@ -203,8 +234,9 @@ export class RTable<T> extends Component<RTableProps<T>, RTableState<T>> {
     }
 
     const { columns, exportType = "by-one-click", onExport = noop } = this.props;
+    const locale = this.getLocale();
 
-    return <Export columns={columns} exportType={exportType} onExport={onExport} />;
+    return <Export locale={locale} columns={columns} exportType={exportType} onExport={onExport} />;
   };
 
   renderCardTitle = () => {

@@ -29,7 +29,7 @@ const DemoOnly = () => (
   <RTable
     showEditColumns
     showExport
-    // exportType="by-config"
+    exportType="by-config"
     onExport={testExport}
     cardTitle={<SomeActions />}
     pagination={{

@@ -4,6 +4,7 @@ import { Button, Modal, Radio, Checkbox } from "antd";
 import RForm from "./../r-form";
 
 export interface ExportProps {
+  locale: any;
   columns: any[];
   exportType: "by-one-click" | "by-config";
 
@@ -59,10 +60,10 @@ export default class Export extends React.Component<ExportProps, ExportState> {
   };
 
   render() {
-    const { exportType } = this.props;
+    const { locale, exportType } = this.props;
 
     if (exportType === "by-one-click") {
-      return <Button onClick={this.handleOneClickExport}>Export</Button>;
+      return <Button onClick={this.handleOneClickExport}>{locale.exportBtnText}</Button>;
     }
 
     const { columns } = this.props;
@@ -70,8 +71,13 @@ export default class Export extends React.Component<ExportProps, ExportState> {
 
     return (
       <div style={{ display: "inline-block" }}>
-        <Button onClick={this.handleToggleVisible}>Export</Button>
-        <Modal title="Export" footer={null} visible={visible} onCancel={this.handleToggleVisible}>
+        <Button onClick={this.handleToggleVisible}>{locale.exportBtnText}</Button>
+        <Modal
+          title={locale.exportBtnText}
+          footer={null}
+          visible={visible}
+          onCancel={this.handleToggleVisible}
+        >
           <RForm
             style={{
               minWidth: 500,
@@ -81,6 +87,7 @@ export default class Export extends React.Component<ExportProps, ExportState> {
             footer={{
               defaultActionSpan: 20,
               defaultActionOffset: 4,
+              submitText: locale.exportModal.submitText,
               onSubmit: this.handleExportSubmit,
             }}
             formItems={[
@@ -91,12 +98,12 @@ export default class Export extends React.Component<ExportProps, ExportState> {
                   initialValue: formFields.columnsType,
                 },
                 id: "columnsType",
-                label: "Column(s)",
+                label: locale.columnsType.text,
                 control: (
                   <Radio.Group
                     options={[
-                      { label: "All", value: "ALL" },
-                      { label: "Partial", value: "PARTIAL" },
+                      { label: locale.columnsType.all, value: "ALL" },
+                      { label: locale.columnsType.partial, value: "PARTIAL" },
                     ]}
                   />
                 ),
@@ -124,12 +131,12 @@ export default class Export extends React.Component<ExportProps, ExportState> {
                   initialValue: formFields.rangeType,
                 },
                 id: "rangeType",
-                label: "Range",
+                label: locale.rangeType.text,
                 control: (
                   <Radio.Group
                     options={[
-                      { label: "All rows", value: "ALL" },
-                      { label: "Selected rows", value: "SELECTED" },
+                      { label: locale.rangeType.all, value: "ALL" },
+                      { label: locale.rangeType.selected, value: "SELECTED" },
                     ]}
                   />
                 ),
