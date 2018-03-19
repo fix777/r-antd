@@ -1,4 +1,5 @@
 import React, { Component, CSSProperties, ReactNode } from "react";
+import PropTypes from "prop-types";
 import { findDOMNode } from "react-dom";
 import omit from "lodash.omit";
 import shallowequal from "shallowequal";
@@ -125,10 +126,22 @@ export interface RTableState<T> {
   columns: Array<RColumnsProps<T>>;
 }
 
+export interface TableContext {
+  antLocale?: {
+    Table?: any;
+  };
+}
+
 export class RTable<T> extends Component<RTableProps<T>, RTableState<T>> {
   static defaultProps: Partial<RTableProps<{}>> = {
     prefixCls: "r-antd_table",
   };
+
+  static contextTypes = {
+    antLocale: PropTypes.object,
+  };
+
+  context: TableContext;
 
   state: RTableState<T> = {
     shouldRemoveColumnFixedProps: false,
