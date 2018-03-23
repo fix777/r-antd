@@ -136,7 +136,7 @@ export interface RTableProps<T> extends TableProps<T> {
   exportOptions?: ExportOptions;
   fixedMaxWidth?: boolean;
   columns: Array<RColumnsProps<T>>;
-  pagination?: RPagination;
+  pagination?: RPagination | boolean;
 
   onExport?(checkedColumnKeys?: string[], rangeType?: "ALL" | "SELECTED"): void | boolean;
 }
