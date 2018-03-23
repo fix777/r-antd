@@ -12,4 +12,20 @@
       }
     }
   }
+
+  &--prev-next-container {
+    margin: 16px 0;
+
+    > * + * {
+      margin-left: 16px;
+    }
+
+    .@{r-table-prefix-cls}--prev-next-btns-wrapper {
+      float: right;
+
+      > * + * {
+        margin-left: 16px;
+      }
+    }
+  }
 }

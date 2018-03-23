@@ -3,8 +3,10 @@ import PropTypes from "prop-types";
 import { findDOMNode } from "react-dom";
 import omit from "lodash.omit";
 import shallowequal from "shallowequal";
-import { Table, Card, Button, Popover, Checkbox } from "antd";
-import { TableProps, TableColumnConfig } from "antd/lib/table/table";
+import classNames from "classnames";
+import { Table, Card, Button, Popover, Checkbox, Icon } from "antd";
+import { TableProps, TableColumnConfig } from "antd/es/table/table";
+import { PaginationProps } from "antd/es/pagination";
 
 import { wrapTooltip, insertIndexAsKey } from "./../__util";
 
@@ -25,6 +27,10 @@ const defaultLocale = {
     text: "范围",
     all: "全部记录",
     selected: "选中记录",
+  },
+  prevNext: {
+    prevText: "上一页",
+    nextText: "下一页",
   },
 };
 
@@ -116,6 +122,12 @@ export interface ExportOptions {
   configModalTitle?: ReactNode;
 }
 
+export interface RPagination extends PaginationProps {
+  type?: "default" | "prev_next";
+  onPrevClick?(pageNo?: number, pageSize?: number): void;
+  onNextClick?(pageNo?: number, pageSize?: number): void;
+}
+
 export interface RTableProps<T> extends TableProps<T> {
   cardTitle?: ReactNode;
   showEditColumns?: boolean; // default to `false`
@@ -124,6 +136,7 @@ export interface RTableProps<T> extends TableProps<T> {
   exportOptions?: ExportOptions;
   fixedMaxWidth?: boolean;
   columns: Array<RColumnsProps<T>>;
+  pagination?: RPagination;
 
   onExport?(checkedColumnKeys?: string[], rangeType?: "ALL" | "SELECTED"): void | boolean;
 }
@@ -191,14 +204,22 @@ export class RTable<T> extends Component<RTableProps<T>, RTableState<T>> {
 
   getPagination = () => {
     const { pagination } = this.props;
-    if (typeof pagination == "boolean") return pagination;
-    if (!pagination) return false;
+    if (typeof pagination == "boolean") {
+      return pagination;
+    }
+    if (!pagination) {
+      return false;
+    }
+    const { type } = pagination;
+    if (type === "prev_next") {
+      return false;
+    }
     return {
       showSizeChanger: true,
       pageSizeOptions: ["6", "10", "20", "50", "100", "500", "1000"],
       showQuickJumper: true,
       showTotal: (total, [start, end]) => `${start}-${end} / ${total}`,
-      ...pagination,
+      ...omit(pagination, ["onPrevClick", "onNextClick"]),
     };
   };
 
@@ -287,6 +308,48 @@ export class RTable<T> extends Component<RTableProps<T>, RTableState<T>> {
     );
   };
 
+  onPrevClick = () => {
+    const { current = 1, pageSize, onPrevClick } = this.props.pagination as RPagination;
+    // if it is 1st page, we should stop here
+    if (current === 1 || typeof onPrevClick != "function") {
+      return;
+    }
+    onPrevClick(current - 1, pageSize);
+  };
+
+  onNextClick = () => {
+    const { current = 1, pageSize, onNextClick } = this.props.pagination as RPagination;
+    if (typeof onNextClick != "function") {
+      return;
+    }
+    onNextClick(current + 1, pageSize);
+  };
+
+  renderPrevNextAction = () => {
+    const { type, current } = this.props.pagination as RPagination;
+    if (type === "default") {
+      return null;
+    }
+    const { prefixCls } = this.props;
+    const containerClazz = classNames(prefixCls, `${prefixCls}--prev-next-container`);
+    const btnsWrapperClazz = classNames(`${prefixCls}--prev-next-btns-wrapper`);
+    const { prevNext } = this.getLocale();
+    return (
+      <div className={containerClazz}>
+        <div className={btnsWrapperClazz}>
+          <Button disabled={current === 1} onClick={this.onPrevClick}>
+            <Icon type="left" />
+            {prevNext.prevText}
+          </Button>
+          <Button onClick={this.onNextClick}>
+            {prevNext.nextText}
+            <Icon type="right" />
+          </Button>
+        </div>
+      </div>
+    );
+  };
+
   render() {
     const {
       showEditColumns = false,
@@ -323,18 +386,21 @@ export class RTable<T> extends Component<RTableProps<T>, RTableState<T>> {
       : {};
 
     const table = (
-      <Table
-        ref={tableRef => (this.table = tableRef)}
-        style={{ ...style, ...defaultStyle }}
-        size="middle"
-        columns={nextColumns}
-        pagination={this.getPagination()}
-        scroll={{
-          x: xWidth,
-          ...scroll,
-        }}
-        {...rest}
-      />
+      <div>
+        <Table
+          ref={tableRef => (this.table = tableRef)}
+          style={{ ...style, ...defaultStyle }}
+          size="middle"
+          columns={nextColumns}
+          pagination={this.getPagination()}
+          scroll={{
+            x: xWidth,
+            ...scroll,
+          }}
+          {...rest}
+        />
+        {this.renderPrevNextAction()}
+      </div>
     );
 
     if (!cardTitle && !showEditColumns && !showExport) {

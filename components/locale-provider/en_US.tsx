@@ -16,5 +16,9 @@ export default {
       all: "ALL ROWS",
       selected: "SELECTED ROWS ONLY",
     },
+    prevNext: {
+      prevText: "Prev",
+      nextText: "Next",
+    },
   },
 };

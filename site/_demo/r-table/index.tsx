@@ -40,6 +40,7 @@ const DemoOnly = () => (
     onExport={testExport}
     cardTitle={<SomeActions />}
     pagination={{
+      type: "prev_next",
       total: 111,
     }}
     fixedMaxWidth={false}
