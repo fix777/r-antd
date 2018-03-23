@@ -82,7 +82,7 @@ const scrollX = (props: RTableProps<{}>): undefined | number => {
 };
 
 function getCheckedColumnOrColumnKeys<T>(
-  columns: Array<RColumnsProps<T>>,
+  columns: Array<RColumnsProps<T>> = [],
   rtvType: "columns" | "columnKeys" = "columnKeys"
 ): Array<RColumnsProps<T>> | string[] {
   const visibleColumns = columns
@@ -135,6 +135,7 @@ export interface TableContext {
 export class RTable<T> extends Component<RTableProps<T>, RTableState<T>> {
   static defaultProps: Partial<RTableProps<{}>> = {
     prefixCls: "r-antd_table",
+    columns: [],
   };
 
   static contextTypes = {
