@@ -2,7 +2,6 @@ import React, { Component, CSSProperties, ReactNode } from "react";
 import PropTypes from "prop-types";
 import { findDOMNode } from "react-dom";
 import omit from "lodash.omit";
-import shallowequal from "shallowequal";
 import classNames from "classnames";
 import { Table, Card, Button, Popover, Checkbox, Icon } from "antd";
 import { TableProps, TableColumnConfig } from "antd/es/table/table";
@@ -67,11 +66,16 @@ const removeColumnFixedProps = (columns: any[] = []) => {
   });
 };
 
-const scrollX = (props: RTableProps<{}>): undefined | number => {
+const scrollX = (props: RTableProps<{}>, state: RTableState): undefined | number => {
   const { columns = [], rowSelection, expandedRowRender } = props;
+  const { invisibleColumnKeys } = state;
+
+  const cols = columns.filter(
+    (column: any) => !invisibleColumnKeys.includes(column.key || column.dataIndex)
+  );
 
   // const hasFixedColumn = columns.some(({ fixed }) => !!fixed);
-  if (!hasFixedColumn(columns)) return;
+  if (!hasFixedColumn(cols)) return;
 
   let hasCheckbox = false;
   if (typeof rowSelection == "object" && rowSelection) hasCheckbox = true;
@@ -80,7 +84,7 @@ const scrollX = (props: RTableProps<{}>): undefined | number => {
   if (hasCheckbox) initalWidth += 62;
   if (typeof expandedRowRender == "function") initalWidth += 50;
 
-  const unFixedColumnWidthSum = columns
+  const unFixedColumnWidthSum = cols
     // .filter(({ fixed }) => !fixed)
     .reduce((widthSum: number, { width = 0 }) => widthSum + Number(width), initalWidth);
   // console.log(unFixedColumnWidthSum);
@@ -141,9 +145,9 @@ export interface RTableProps<T> extends TableProps<T> {
   onExport?(checkedColumnKeys?: string[], rangeType?: "ALL" | "SELECTED"): void | boolean;
 }
 
-export interface RTableState<T> {
+export interface RTableState {
   shouldRemoveColumnFixedProps: boolean;
-  columns: Array<RColumnsProps<T>>;
+  invisibleColumnKeys: string[];
 }
 
 export interface TableContext {
@@ -152,7 +156,7 @@ export interface TableContext {
   };
 }
 
-export class RTable<T> extends Component<RTableProps<T>, RTableState<T>> {
+export class RTable<T> extends Component<RTableProps<T>, RTableState> {
   static defaultProps: Partial<RTableProps<{}>> = {
     exportOptions: {
       enabled: false,
@@ -168,26 +172,15 @@ export class RTable<T> extends Component<RTableProps<T>, RTableState<T>> {
 
   context: TableContext;
 
-  state: RTableState<T> = {
+  state: RTableState = {
     shouldRemoveColumnFixedProps: false,
-    columns: "columns" in this.props ? this.props.columns : [],
+    invisibleColumnKeys: [],
   };
 
   private table: any;
 
   componentDidMount() {
-    const tableDomNode = findDOMNode(this.table);
-    const xWidth = scrollX(this.props) || 0;
-    if (tableDomNode.clientWidth - xWidth > 0) {
-      this.setState({ shouldRemoveColumnFixedProps: true });
-    }
-  }
-
-  componentWillReceiveProps(nextProps: RTableProps<T>) {
-    const { columns } = this.props;
-    if (!shallowequal(columns, nextProps.columns)) {
-      this.setState({ columns: nextProps.columns });
-    }
+    this.fixColumnFixed();
   }
 
   getLocale() {
@@ -223,19 +216,23 @@ export class RTable<T> extends Component<RTableProps<T>, RTableState<T>> {
     };
   };
 
-  handleCheckedColumnKeysChange = (checked: boolean, curColumnKey: string) => () => {
-    this.setState(({ columns }) => {
-      const nxtColumns = columns.map(({ visible, key, dataIndex, ...rest }) => {
-        const columnKey = key || dataIndex;
-        let nxtVisible = visible;
-        if (columnKey === curColumnKey) {
-          nxtVisible = checked;
-        }
-        return { visible: nxtVisible, key, dataIndex, ...rest };
-      });
+  fixColumnFixed = () => {
+    const tableDomNode = findDOMNode(this.table);
+    const xWidth = scrollX(this.props, this.state) || 0;
+    if (tableDomNode.clientWidth - xWidth > 0) {
+      this.setState({ shouldRemoveColumnFixedProps: true });
+    }
+  };
 
-      return { columns: nxtColumns };
+  handleCheckedColumnKeysChange = (checked: boolean, curColumnKey: string) => () => {
+    this.setState(({ invisibleColumnKeys }) => {
+      const nxtVisibleColumnKeys = !checked
+        ? [...invisibleColumnKeys, curColumnKey]
+        : invisibleColumnKeys.filter(k => k != curColumnKey);
+
+      return { invisibleColumnKeys: nxtVisibleColumnKeys };
     });
+    this.fixColumnFixed();
   };
 
   renderEditColumnsAction = () => {
@@ -245,11 +242,11 @@ export class RTable<T> extends Component<RTableProps<T>, RTableState<T>> {
       return null;
     }
 
-    const { columns } = this.state;
-    const checkedColumnKeys = getCheckedColumnOrColumnKeys<T>(columns) as string[];
+    const { columns } = this.props;
+    const { invisibleColumnKeys } = this.state;
     const mapColumnsCheckbox = ({ key, dataIndex, title }) => {
       const columnKey = key || dataIndex;
-      const checked = checkedColumnKeys.includes(columnKey);
+      const checked = !invisibleColumnKeys.includes(columnKey);
       return (
         <p key={columnKey}>
           <Checkbox
@@ -326,7 +323,7 @@ export class RTable<T> extends Component<RTableProps<T>, RTableState<T>> {
   };
 
   renderPrevNextAction = () => {
-    const { type, current } = this.props.pagination as RPagination;
+    const { type = "default", current } = this.props.pagination as RPagination;
     if (type === "default") {
       return null;
     }
@@ -359,14 +356,17 @@ export class RTable<T> extends Component<RTableProps<T>, RTableState<T>> {
       prefixCls,
       style,
       scroll,
+      columns,
       ...others
     } = this.props;
-    const { shouldRemoveColumnFixedProps, columns } = this.state;
+    const { shouldRemoveColumnFixedProps, invisibleColumnKeys } = this.state;
 
     const visibleColumns = getCheckedColumnOrColumnKeys(columns, "columns") as Array<
       RColumnsProps<T>
     >;
-    let nextColumns = mapColumns(visibleColumns);
+    let nextColumns = mapColumns(visibleColumns).filter(
+      column => !invisibleColumnKeys.includes(column.key || column.dataIndex)
+    );
     if (shouldRemoveColumnFixedProps) {
       nextColumns = removeColumnFixedProps(nextColumns);
     }
@@ -379,7 +379,7 @@ export class RTable<T> extends Component<RTableProps<T>, RTableState<T>> {
       };
     }
 
-    const xWidth = scrollX(this.props);
+    const xWidth = scrollX(this.props, this.state);
 
     const defaultStyle: Partial<CSSProperties> = fixedMaxWidth
       ? { maxWidth: xWidth || "100%" }
