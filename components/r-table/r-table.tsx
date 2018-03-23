@@ -110,11 +110,18 @@ export interface RColumnsProps<T> extends TableColumnConfig<T> {
   renderTooltip?(text?: any, record?: any, index?: number): ReactNode;
 }
 
+export interface ExportOptions {
+  enabled?: boolean; // use this props over `showExport` in @1.0.0 version
+  clickType?: "default" | "configurable"; // use this props over `exportType` in @1.0.0 version
+  configModalTitle?: ReactNode;
+}
+
 export interface RTableProps<T> extends TableProps<T> {
   cardTitle?: ReactNode;
   showEditColumns?: boolean; // default to `false`
   showExport?: boolean; // default to `false`
   exportType?: "by-one-click" | "by-config"; // default to `by-one-click`
+  exportOptions?: ExportOptions;
   fixedMaxWidth?: boolean;
   columns: Array<RColumnsProps<T>>;
 
@@ -134,6 +141,10 @@ export interface TableContext {
 
 export class RTable<T> extends Component<RTableProps<T>, RTableState<T>> {
   static defaultProps: Partial<RTableProps<{}>> = {
+    exportOptions: {
+      enabled: false,
+      clickType: "default",
+    },
     prefixCls: "r-antd_table",
     columns: [],
   };
@@ -241,7 +252,7 @@ export class RTable<T> extends Component<RTableProps<T>, RTableState<T>> {
   };
 
   renderExportAction = () => {
-    const { showExport } = this.props;
+    const { showExport, exportOptions } = this.props;
 
     if (!showExport) {
       return null;
@@ -250,7 +261,15 @@ export class RTable<T> extends Component<RTableProps<T>, RTableState<T>> {
     const { columns, exportType = "by-one-click", onExport = noop } = this.props;
     const locale = this.getLocale();
 
-    return <Export locale={locale} columns={columns} exportType={exportType} onExport={onExport} />;
+    return (
+      <Export
+        exportOptions={exportOptions as ExportOptions}
+        locale={locale}
+        columns={columns}
+        exportType={exportType}
+        onExport={onExport}
+      />
+    );
   };
 
   renderCardTitle = () => {
@@ -273,6 +292,7 @@ export class RTable<T> extends Component<RTableProps<T>, RTableState<T>> {
       showEditColumns = false,
       showExport = false,
       fixedMaxWidth = false,
+      cardTitle,
       prefixCls,
       style,
       scroll,
@@ -317,7 +337,7 @@ export class RTable<T> extends Component<RTableProps<T>, RTableState<T>> {
       />
     );
 
-    if (!showEditColumns && !showExport) {
+    if (!cardTitle && !showEditColumns && !showExport) {
       return table;
     }
 

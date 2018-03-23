@@ -1,5 +1,5 @@
 import React from "react";
-import { Button } from "antd";
+import { Button, Tag } from "antd";
 
 import { RTable } from "./../../../components";
 import "./../../../components/r-table/style";
@@ -30,6 +30,13 @@ const DemoOnly = () => (
     showEditColumns
     showExport
     exportType="by-config"
+    exportOptions={{
+      configModalTitle: (
+        <div>
+          导出 <Tag color="orange">* 此处经常有 🐻 出没</Tag>
+        </div>
+      ),
+    }}
     onExport={testExport}
     cardTitle={<SomeActions />}
     pagination={{

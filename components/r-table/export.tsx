@@ -3,10 +3,13 @@ import { Button, Modal, Radio, Checkbox } from "antd";
 
 import RForm from "./../r-form";
 
+import { ExportOptions } from "./r-table";
+
 export interface ExportProps {
   locale: any;
   columns: any[];
   exportType: "by-one-click" | "by-config";
+  exportOptions: ExportOptions;
 
   onExport(checkedColumnKeys?: string[], rangeType?: "ALL" | "SELECTED"): void | boolean;
 }
@@ -66,14 +69,15 @@ export default class Export extends React.Component<ExportProps, ExportState> {
       return <Button onClick={this.handleOneClickExport}>{locale.exportBtnText}</Button>;
     }
 
-    const { columns } = this.props;
+    const { exportOptions, columns } = this.props;
+    const { configModalTitle } = exportOptions;
     const { visible, formFields } = this.state;
 
     return (
       <div style={{ display: "inline-block" }}>
         <Button onClick={this.handleToggleVisible}>{locale.exportBtnText}</Button>
         <Modal
-          title={locale.exportBtnText}
+          title={configModalTitle || locale.exportBtnText}
           footer={null}
           visible={visible}
           onCancel={this.handleToggleVisible}
