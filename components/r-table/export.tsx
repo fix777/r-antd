@@ -70,7 +70,7 @@ export default class Export extends React.Component<ExportProps, ExportState> {
     }
 
     const { exportOptions, columns } = this.props;
-    const { configModalTitle } = exportOptions;
+    const { configModalTitle, configModalPrev, configModalExtra } = exportOptions;
     const { visible, formFields } = this.state;
 
     return (
@@ -82,6 +82,7 @@ export default class Export extends React.Component<ExportProps, ExportState> {
           visible={visible}
           onCancel={this.handleToggleVisible}
         >
+          {configModalPrev}
           <RForm
             style={{
               minWidth: 500,
@@ -147,6 +148,7 @@ export default class Export extends React.Component<ExportProps, ExportState> {
               },
             ]}
           />
+          {configModalExtra}
         </Modal>
       </div>
     );

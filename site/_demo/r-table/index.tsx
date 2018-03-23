@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Tag } from "antd";
+import { Button, Alert } from "antd";
 
 import { RTable } from "./../../../components";
 import "./../../../components/r-table/style";
@@ -31,10 +31,8 @@ const DemoOnly = () => (
     showExport
     exportType="by-config"
     exportOptions={{
-      configModalTitle: (
-        <div>
-          导出 <Tag color="orange">* 此处经常有 🐻 出没</Tag>
-        </div>
+      configModalPrev: (
+        <Alert style={{ margin: "0 40px 8px" }} showIcon message="* 此处经常有 🐻 出没" />
       ),
     }}
     onExport={testExport}

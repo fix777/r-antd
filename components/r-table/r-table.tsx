@@ -124,6 +124,8 @@ export interface ExportOptions {
   enabled?: boolean; // use this props over `showExport` in @1.0.0 version
   clickType?: "default" | "configurable"; // use this props over `exportType` in @1.0.0 version
   configModalTitle?: ReactNode;
+  configModalPrev?: ReactNode;
+  configModalExtra?: ReactNode;
 }
 
 export interface RPagination extends PaginationProps {
