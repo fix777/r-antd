@@ -1,7 +1,4 @@
-import React, {
-  Component,
-  ReactNode,
-} from "react";
+import React, { Component, ReactNode } from "react";
 import { Select } from "antd";
 import { SelectProps, OptionProps } from "antd/lib/select";
 
@@ -18,31 +15,25 @@ export interface RSelectProps extends SelectProps {
 }
 
 export class RSelect extends Component<RSelectProps> {
-  renderOption = ({ key, value, label, ...rest}: ROptionProps) => {
+  static defaultProps: Partial<RSelectProps> = {
+    dataSource: [],
+  };
+
+  renderOption = ({ key, value, label, ...rest }: ROptionProps) => {
     if (typeof key != "string" && typeof key != "number") key = value;
     return (
-      <Option
-        key={key}
-        value={value}
-        {...rest}
-      >
-        { label }
+      <Option key={key} value={value} {...rest}>
+        {label}
       </Option>
     );
-  }
+  };
 
   render() {
-    const {
-      dataSource,
-      ...rest
-    } = this.props;
+    const { dataSource, ...rest } = this.props;
 
     return (
-      <Select
-        optionFilterProp="children"
-        {...rest}
-      >
-        { dataSource.map(this.renderOption) }
+      <Select optionFilterProp="children" {...rest}>
+        {dataSource.map(this.renderOption)}
       </Select>
     );
   }
