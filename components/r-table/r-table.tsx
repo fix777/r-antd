@@ -166,6 +166,7 @@ export class RTable<T> extends Component<RTableProps<T>, RTableState> {
     },
     prefixCls: "r-antd_table",
     columns: [],
+    dataSource: [],
   };
 
   static contextTypes = {
@@ -325,7 +326,8 @@ export class RTable<T> extends Component<RTableProps<T>, RTableState> {
   };
 
   renderPrevNextAction = () => {
-    const { type = "default", current } = this.props.pagination as RPagination;
+    const { dataSource, pagination } = this.props;
+    const { type = "default", current, pageSize } = pagination as RPagination;
     if (type === "default") {
       return null;
     }
@@ -340,7 +342,10 @@ export class RTable<T> extends Component<RTableProps<T>, RTableState> {
             <Icon type="left" />
             {prevNext.prevText}
           </Button>
-          <Button onClick={this.onNextClick}>
+          <Button
+            disabled={(dataSource as any[]).length < (pageSize || 10)}
+            onClick={this.onNextClick}
+          >
             {prevNext.nextText}
             <Icon type="right" />
           </Button>
