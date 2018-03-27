@@ -167,6 +167,7 @@ export class RTable<T> extends Component<RTableProps<T>, RTableState> {
     prefixCls: "r-antd_table",
     columns: [],
     dataSource: [],
+    pagination: false,
   };
 
   static contextTypes = {
