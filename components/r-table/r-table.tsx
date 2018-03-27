@@ -327,6 +327,9 @@ export class RTable<T> extends Component<RTableProps<T>, RTableState> {
 
   renderPrevNextAction = () => {
     const { dataSource, pagination } = this.props;
+    if (typeof "pagination" == "boolean") {
+      return null;
+    }
     const { type = "default", current, pageSize } = pagination as RPagination;
     if (type === "default") {
       return null;
