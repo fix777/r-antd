@@ -15,6 +15,7 @@ export default {
       text: "Row(s)",
       all: "ALL ROWS",
       selected: "SELECTED ROWS ONLY",
+      result: "RESULT ROWS",
     },
     prevNext: {
       prevText: "Prev",

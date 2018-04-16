@@ -26,6 +26,7 @@ const defaultLocale = {
     text: "范围",
     all: "全部记录",
     selected: "选中记录",
+    result: "查询结果",
   },
   prevNext: {
     prevText: "上一页",

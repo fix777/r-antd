@@ -142,6 +142,7 @@ export default class Export extends React.Component<ExportProps, ExportState> {
                     options={[
                       { label: locale.rangeType.all, value: "ALL" },
                       { label: locale.rangeType.selected, value: "SELECTED" },
+                      { label: locale.rangeType.result, value: "RESULT" },
                     ]}
                   />
                 ),
