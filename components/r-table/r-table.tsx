@@ -127,6 +127,13 @@ export interface ExportOptions {
   configModalTitle?: ReactNode;
   configModalPrev?: ReactNode;
   configModalExtra?: ReactNode;
+  rangeTypes?: string[]; // "ALL" | "SELECTED" | "RESULT"
+}
+
+export interface OnExportOptions {
+  checkedColumnKeys?: string[];
+  columnsType?: "ALL" | "PARTIAL";
+  rangeType?: "ALL" | "SELECTED" | "RESULT";
 }
 
 export interface RPagination extends PaginationProps {
@@ -145,7 +152,7 @@ export interface RTableProps<T> extends TableProps<T> {
   columns: Array<RColumnsProps<T>>;
   pagination?: RPagination | boolean;
 
-  onExport?(checkedColumnKeys?: string[], rangeType?: "ALL" | "SELECTED"): void | boolean;
+  onExport?(options: OnExportOptions): void | boolean;
 }
 
 export interface RTableState {
@@ -164,6 +171,7 @@ export class RTable<T> extends Component<RTableProps<T>, RTableState> {
     exportOptions: {
       enabled: false,
       clickType: "default",
+      rangeTypes: ["ALL", "SELECTED", "RESULT"],
     },
     prefixCls: "r-antd_table",
     columns: [],

@@ -3,7 +3,7 @@ import { Button, Modal, Radio, Checkbox } from "antd";
 
 import RForm from "./../r-form";
 
-import { ExportOptions } from "./r-table";
+import { ExportOptions, OnExportOptions } from "./r-table";
 
 export interface ExportProps {
   locale: any;
@@ -11,7 +11,7 @@ export interface ExportProps {
   exportType: "by-one-click" | "by-config";
   exportOptions: ExportOptions;
 
-  onExport(checkedColumnKeys?: string[], rangeType?: "ALL" | "SELECTED"): void | boolean;
+  onExport(options?: OnExportOptions): void | boolean;
 }
 
 export interface ExportState {
@@ -19,7 +19,7 @@ export interface ExportState {
   formFields: {
     columnsType: "ALL" | "PARTIAL";
     checkedColumnKeys: string[];
-    rangeType: "ALL" | "SELECTED";
+    rangeType: "ALL" | "SELECTED" | "RESULT";
   };
 }
 
@@ -45,7 +45,11 @@ export default class Export extends React.Component<ExportProps, ExportState> {
       columnsType === "ALL"
         ? columns.map(({ key, dataIndex }) => key || dataIndex)
         : checkedColumnKeys;
-    const exportResult = onExport(nxtCheckedColumnKeys, rangeType);
+    const exportResult = onExport({
+      checkedColumnKeys: nxtCheckedColumnKeys,
+      columnsType,
+      rangeType,
+    });
     if (!exportResult) {
       return;
     }
@@ -70,7 +74,12 @@ export default class Export extends React.Component<ExportProps, ExportState> {
     }
 
     const { exportOptions, columns } = this.props;
-    const { configModalTitle, configModalPrev, configModalExtra } = exportOptions;
+    const {
+      configModalTitle,
+      configModalPrev,
+      configModalExtra,
+      rangeTypes = ["ALL", "SELECTED", "RESULT"],
+    } = exportOptions;
     const { visible, formFields } = this.state;
 
     return (
@@ -143,7 +152,7 @@ export default class Export extends React.Component<ExportProps, ExportState> {
                       { label: locale.rangeType.all, value: "ALL" },
                       { label: locale.rangeType.selected, value: "SELECTED" },
                       { label: locale.rangeType.result, value: "RESULT" },
-                    ]}
+                    ].filter(({ value }) => (rangeTypes as string[]).includes(value))}
                   />
                 ),
               },

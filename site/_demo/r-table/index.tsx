@@ -4,7 +4,7 @@ import { Button, Alert } from "antd";
 import { RTable } from "./../../../components";
 import "./../../../components/r-table/style";
 
-const testExport = () => {
+const testExport = options => {
   /* tslint:disable */
   console.clear();
   console.log(
@@ -13,6 +13,7 @@ const testExport = () => {
   console.log(
     "You can also set the `exportType` to `by-config` to enable advanced built-in export configuration modal."
   );
+  console.log("options: ", options);
   /* tslint:enable */
   // return false;
 };
@@ -49,9 +50,7 @@ const DemoOnly = () => (
         width: 200,
         fixed: "left",
         tooltip: true,
-        renderTooltip: (text, { b }) => {
-          // tslint:disable-next-line:no-console
-          console.log(text);
+        renderTooltip: (_, { b }) => {
           return b;
         },
         render: text => <a>{text}</a>,
@@ -146,9 +145,6 @@ const DemoOnly = () => (
         b: "This is b",
       },
     ]}
-    rowSelection={{
-      onChange: console.log,
-    }}
   />
 );
 
