@@ -4,7 +4,7 @@ import { findDOMNode } from "react-dom";
 import omit from "lodash.omit";
 import classNames from "classnames";
 import { Table, Card, Button, Popover, Checkbox, Icon } from "antd";
-import { TableProps, TableColumnConfig } from "antd/es/table/table";
+import { TableProps, TableColumnConfig } from "antd/es/table/Table";
 import { PaginationProps } from "antd/es/pagination";
 
 import { wrapTooltip, insertIndexAsKey } from "./../__util";
