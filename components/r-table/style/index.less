@@ -1,4 +1,5 @@
 @r-table-prefix-cls: ~"r-antd_table";
+@default-margin-size: 16px;
 
 .@{r-table-prefix-cls} {
   &--card {
@@ -6,25 +7,31 @@
       padding: 0;
     }
 
+    &-title {
+      > * + * {
+        margin-left: @default-margin-size;
+      }
+    }
+
     &-extra {
       > * + * {
-        margin-left: 16px;
+        margin-left: @default-margin-size;
       }
     }
   }
 
   &--prev-next-container {
-    margin: 16px 0;
+    margin: @default-margin-size 0;
 
     > * + * {
-      margin-left: 16px;
+      margin-left: @default-margin-size;
     }
 
     .@{r-table-prefix-cls}--prev-next-btns-wrapper {
       float: right;
 
       > * + * {
-        margin-left: 16px;
+        margin-left: @default-margin-size;
       }
     }
   }

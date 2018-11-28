@@ -123,6 +123,7 @@ export interface RColumnsProps<T> extends TableColumnConfig<T> {
 
 export interface ExportOptions {
   enabled?: boolean; // use this props over `showExport` in @1.0.0 version
+  btnText?: string;
   clickType?: "default" | "configurable"; // use this props over `exportType` in @1.0.0 version
   configModalTitle?: ReactNode;
   configModalPrev?: ReactNode;
@@ -168,6 +169,7 @@ export interface TableContext {
 
 export class RTable<T> extends Component<RTableProps<T>, RTableState> {
   static defaultProps: Partial<RTableProps<{}>> = {
+    cardTitle: null,
     exportOptions: {
       enabled: false,
       clickType: "default",
@@ -304,18 +306,20 @@ export class RTable<T> extends Component<RTableProps<T>, RTableState> {
   };
 
   renderCardTitle = () => {
-    return this.props.cardTitle;
+    const { prefixCls } = this.props;
+
+    return (
+      <div className={`${prefixCls}--card-title`}>
+        {this.renderExportAction()}
+        {this.props.cardTitle}
+      </div>
+    );
   };
 
   renderCardExtra = () => {
     const { prefixCls } = this.props;
 
-    return (
-      <div className={`${prefixCls}--card-extra`}>
-        {this.renderEditColumnsAction()}
-        {this.renderExportAction()}
-      </div>
-    );
+    return <div className={`${prefixCls}--card-extra`}>{this.renderEditColumnsAction()}</div>;
   };
 
   onPrevClick = () => {

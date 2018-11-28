@@ -7,6 +7,7 @@ import { ExportOptions, OnExportOptions } from "./r-table";
 
 export interface ExportProps {
   locale: any;
+  btnText?: string;
   columns: any[];
   exportType: "by-one-click" | "by-config";
   exportOptions: ExportOptions;
@@ -75,6 +76,7 @@ export default class Export extends React.Component<ExportProps, ExportState> {
 
     const { exportOptions, columns } = this.props;
     const {
+      btnText,
       configModalTitle,
       configModalPrev,
       configModalExtra,
@@ -84,7 +86,7 @@ export default class Export extends React.Component<ExportProps, ExportState> {
 
     return (
       <div style={{ display: "inline-block" }}>
-        <Button onClick={this.handleToggleVisible}>{locale.exportBtnText}</Button>
+        <Button onClick={this.handleToggleVisible}>{btnText || locale.exportBtnText}</Button>
         <Modal
           title={configModalTitle || locale.exportBtnText}
           footer={null}
