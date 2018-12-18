@@ -234,7 +234,7 @@ export class RTable<T> extends Component<RTableProps<T>, RTableState> {
   fixColumnFixed = () => {
     const tableDomNode = findDOMNode(this.table);
     const xWidth = scrollX(this.props, this.state) || 0;
-    if (tableDomNode.clientWidth - xWidth > 0) {
+    if (xWidth > 0 && tableDomNode.clientWidth - xWidth > 0) {
       this.setState({ shouldRemoveColumnFixedProps: true });
     }
   };
