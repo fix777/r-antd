@@ -1,6 +1,6 @@
 {
   "name": "r-antd",
-  "version": "0.2.17-0",
+  "version": "0.2.17",
   "description": "",
   "main": "lib/index.js",
   "module": "es/index.js",
