@@ -1,5 +1,6 @@
 import * as React from "react";
 import { Button, Modal, Radio, Checkbox } from "antd";
+import get from "lodash.get";
 
 import RForm from "./../r-form";
 
@@ -30,7 +31,7 @@ export default class Export extends React.Component<ExportProps, ExportState> {
     formFields: {
       columnsType: "ALL",
       checkedColumnKeys: [],
-      rangeType: "ALL",
+      rangeType: get(this.props.exportOptions, "rangeTypes[0]", "ALL"),
     },
   };
 
@@ -156,7 +157,13 @@ export default class Export extends React.Component<ExportProps, ExportState> {
                       { label: locale.rangeType.selected, value: "SELECTED" },
                       { label: locale.rangeType.result, value: "RESULT" },
                       ...customizedRanges,
-                    ].filter(({ value }) => (rangeTypes as string[]).includes(value))}
+                    ]
+                      .sort(
+                        (a, b) =>
+                          (rangeTypes as string[]).findIndex((rangeType) => rangeType === a.value) -
+                          (rangeTypes as string[]).findIndex((rangeType) => rangeType === b.value)
+                      )
+                      .filter(({ value }) => (rangeTypes as string[]).includes(value))}
                   />
                 ),
               },
