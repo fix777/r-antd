@@ -81,6 +81,7 @@ export default class Export extends React.Component<ExportProps, ExportState> {
       configModalPrev,
       configModalExtra,
       rangeTypes = ["ALL", "SELECTED", "RESULT"],
+      customizedRanges = [],
     } = exportOptions;
     const { visible, formFields } = this.state;
 
@@ -154,6 +155,7 @@ export default class Export extends React.Component<ExportProps, ExportState> {
                       { label: locale.rangeType.all, value: "ALL" },
                       { label: locale.rangeType.selected, value: "SELECTED" },
                       { label: locale.rangeType.result, value: "RESULT" },
+                      ...customizedRanges,
                     ].filter(({ value }) => (rangeTypes as string[]).includes(value))}
                   />
                 ),

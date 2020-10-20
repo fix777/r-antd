@@ -28,9 +28,9 @@
     "prepublish": "yarn compile"
   },
   "devDependencies": {
-    "@types/node": "8.0.22",
-    "@types/react": "15.6.1",
-    "@types/react-dom": "15.5.2",
+    "@types/node": "~8.0.22",
+    "@types/react": "~15.6.1",
+    "@types/react-dom": "~15.5.2",
     "@types/webpack": "3.0.9",
     "antd-tools": "3.0.0",
     "babel-cli": "6.24.1",
@@ -53,7 +53,7 @@
     "less": "2.7.2",
     "less-loader": "4.0.5",
     "merge2": "1.2.0",
-    "prop-types": "15.5.10",
+    "prop-types": "15.5.7",
     "react": "15.6.1",
     "react-dom": "15.6.1",
     "style-loader": "0.18.2",
@@ -71,5 +71,9 @@
     "antd": "~2.13.1",
     "classnames": "~2.2.5",
     "lodash.omit": "~4.5.0"
+  },
+  "resolutions": {
+    "antd/**/prop-types": "15.5.7",
+    "@types/react/**/@types/prop-types": "15.5.7"
   }
 }
