@@ -4,7 +4,7 @@ import { Button, Alert } from "antd";
 import { RTable } from "./../../../components";
 import "./../../../components/r-table/style";
 
-const testExport = options => {
+const testExport = (options) => {
   /* tslint:disable */
   console.clear();
   console.log(
@@ -35,6 +35,8 @@ const DemoOnly = () => (
       configModalPrev: (
         <Alert style={{ margin: "0 40px 8px" }} showIcon message="* 此处经常有 🐻 出没" />
       ),
+      rangeTypes: ["C1", "RESULT", "SELECTED", "ALL"],
+      customizedRanges: [{ label: "C1", value: "C1" }],
     }}
     onExport={testExport}
     cardTitle={<SomeActions />}
@@ -53,7 +55,7 @@ const DemoOnly = () => (
         renderTooltip: (_, { b }) => {
           return b;
         },
-        render: text => <a>{text}</a>,
+        render: (text) => <a>{text}</a>,
       },
       {
         title: "Column B",
