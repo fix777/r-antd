@@ -40,7 +40,7 @@ const noop = () => {};
 const hasFixedColumn = (columns: any[] = []) => columns.some(({ fixed }) => !!fixed);
 
 const mapColumns = (columns: any[] = []) =>
-  columns.map(column => {
+  columns.map((column) => {
     const { tooltip = false, renderTooltip, maxWidth, width, render } = column;
     if (!tooltip) return column;
     if (!width && !maxWidth) {
@@ -59,7 +59,7 @@ const mapColumns = (columns: any[] = []) =>
 
 const removeColumnFixedProps = (columns: any[] = []) => {
   if (!hasFixedColumn(columns)) return columns;
-  return columns.map(column => {
+  return columns.map((column) => {
     if ("fixed" in column) {
       return omit(column, ["fixed"]);
     }
@@ -102,7 +102,7 @@ function getCheckedColumnOrColumnKeys<T>(
       return { visible: columnVisible, ...rest };
     })
     .filter(({ visible }) => visible)
-    .map(column => omit(column, ["visible"]));
+    .map((column) => omit(column, ["visible"]));
 
   if (rtvType === "columns") {
     return visibleColumns;
@@ -129,6 +129,7 @@ export interface ExportOptions {
   configModalPrev?: ReactNode;
   configModalExtra?: ReactNode;
   rangeTypes?: string[]; // "ALL" | "SELECTED" | "RESULT"
+  customizedRanges?: Array<{ label: string; value: string }>;
 }
 
 export interface OnExportOptions {
@@ -243,7 +244,7 @@ export class RTable<T> extends Component<RTableProps<T>, RTableState> {
     this.setState(({ invisibleColumnKeys }) => {
       const nxtVisibleColumnKeys = !checked
         ? [...invisibleColumnKeys, curColumnKey]
-        : invisibleColumnKeys.filter(k => k != curColumnKey);
+        : invisibleColumnKeys.filter((k) => k != curColumnKey);
 
       return { invisibleColumnKeys: nxtVisibleColumnKeys };
     });
@@ -389,7 +390,7 @@ export class RTable<T> extends Component<RTableProps<T>, RTableState> {
       RColumnsProps<T>
     >;
     let nextColumns = mapColumns(visibleColumns).filter(
-      column => !invisibleColumnKeys.includes(column.key || column.dataIndex)
+      (column) => !invisibleColumnKeys.includes(column.key || column.dataIndex)
     );
     if (shouldRemoveColumnFixedProps) {
       nextColumns = removeColumnFixedProps(nextColumns);
@@ -412,7 +413,7 @@ export class RTable<T> extends Component<RTableProps<T>, RTableState> {
     const table = (
       <div>
         <Table
-          ref={tableRef => (this.table = tableRef)}
+          ref={(tableRef) => (this.table = tableRef)}
           style={{ ...style, ...defaultStyle }}
           size="middle"
           columns={nextColumns}

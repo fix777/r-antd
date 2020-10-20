@@ -2,6 +2,7 @@
   "compilerOptions": {
     "strictNullChecks": true,
     "moduleResolution": "node",
+    "skipLibCheck": true,
     "allowSyntheticDefaultImports": true,
     "experimentalDecorators": true,
     "jsx": "preserve",
